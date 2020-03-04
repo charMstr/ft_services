@@ -1,0 +1,24 @@
+server {
+	listen 80;
+	listen [::]:80;
+
+	root /var/www/my_server;
+	index index.php index.html index.htm;
+
+	server_name loalhost www.localhost;
+
+	location / {
+		autoindex on;
+		#try_files	$uri $uri/ /index.php?$args;
+	    try_files $uri $uri/ =404;
+	}
+}
+
+#server {
+#	listen 80;
+#	listen [::]:80;
+#
+#	server_name  localhost www.localhost;
+#
+#	return 302 https://$server_name$request_uri;
+#}
