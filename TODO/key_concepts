@@ -1,0 +1,44 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    key_concepts                                       :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: charmstr <charmstr@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/02/27 18:51:57 by charmstr          #+#    #+#              #
+#    Updated: 2020/03/05 17:59:51 by charmstr         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+1)
+to get the base os of an image, check on the registry...
+-> or you can get the image: docker pull hello-world, then 
+		docker manifest inspect hello-world
+		(look at the bottom)
+-> otherwise to be sure you can run the image, then:
+	cat /etc/os-release
+
+2)
+upon starting minikube without a speciic profile, the default profile named
+"minikube" is created/used. which can be found at this location: 
+/Users/charmstr/goinfre/.minikube/profiles/minikube
+	-> do a cat and you will see some interesting details.!
+This folder along with the ~/.minikube/config/config.json file contain 
+everything you need to know about the Minikube profiles in your local 
+environment.
+
+3) service:
+it uses labels selectors for the routing to pods.
+command:
+	minikube addons enable ingress
+		>allows us to use the ingress
+
+4) nginx can be used as a load balancer!
+
+5) labels:
+Note: You must specify an appropriate selector and Pod template labels in a
+Deployment (in this case, app: nginx). Do not overlap labels or selectors with
+other controllers (including other Deployments and StatefulSets). Kubernetes
+doesn’t stop you from overlapping, and if multiple controllers have overlapping
+selectors those controllers might conflict and behave unexpectedly.
+

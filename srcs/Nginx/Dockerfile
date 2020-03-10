@@ -2,7 +2,8 @@ FROM alpine:3.7
 
 RUN apk update \
 	&& apk upgrade \
-	&& apk add bash
+	&& apk add bash \
+	&& apk add openssl
 
 # Install openrc
 RUN apk update && apk add openrc &&\
@@ -43,5 +44,17 @@ VOLUME [ “/sys/fs/cgroup” ]
 
 EXPOSE 80 443
 
-#RUN apk add openrc
-ENTRYPOINT openrc single && /etc/init.d/nginx start && bash
+#GENERATING AUTOSIGNED CERTIFICATES FOR SSL DEMO, NO PROMPT
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=FR/O=krkr/OU=Domain Control Validated/CN=*.krkr.io"
+COPY ./srcs_nginx/self-signed.conf /etc/nginx/snippets/
+
+# note: we start with openrc so that it gets pid 1
+#		from that we can boot the nginx service from /sbin/open-rc...
+# note: at first the command used to be:
+#	ENTRYPOINT openrc single && /etc/init.d/nginx start && bash
+#	but now we add some more at the end of the line so that when we run the
+# container we dont have to specify the --attach=... -i --tty options# which
+# could not be done in the yaml file.
+# note: we have the while true because busybox doenst know "sleep infinity"
+ENTRYPOINT openrc single && /etc/init.d/nginx start && exec /bin/sh -c "trap : TERM INT; (while true; do sleep 1000; done) & wait"
+

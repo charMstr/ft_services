@@ -1,0 +1,72 @@
+#start minikube with the correct virtual machine.
+# note here: you can use options such as --disk-size, --cpus, --memory in order
+# to control the vm's caracteristics.
+
+	minikube start --vm-driver=virtual_box
+
+
+#makes sure the docker daemon is accessible from within minikube
+# note: the -p stands for profile, we make sure it is set for the default
+#	profile("minikube" is the defualt profile).
+
+	eval $(minikube -p minikube docker-env)
+
+
+#chek everithing is ok:
+	minikube version
+	kubectl version
+
+
+#verification the cluster is up and running.
+# note: the ip of the kubernetes master is the same as the result from command:
+# "minikube ip"
+
+	kubectl cluster-info --> gives the informations about the cluster we created
+
+
+#view the nodes, the podes, the services, deplyment,  or all in the cluster:
+	kubectl get pods
+	kubectl get service
+	kubectl get nodes      #note: minikube start only one node, named minikube
+	kubectl get deployment
+	kubectl get all
+	kubectl get rs #note: shows the replicaset...
+
+
+#when i build my image ex: docker build -t my-image .
+# and then i run it as such:
+	kubectl run -i --rm --tty busybox2 --image=my-image --image-pull-policy=Never --port=80
+# then use the command to see all the details that looks a lot to a yaml file...
+	kubectl describe pod my-image2-5c774d4b8f-hkbdd
+	# note: the --port=80 option adds the port in the container section!!
+	# note: the --rm is there to suppress everything when done.
+
+
+#command to be executed inside the first container of a given pod.
+#(see kubectl exec -h for help
+
+	kubectl exec pod/busybox2-5c774d4b8f-2tgg9 service nginx status
+# or we can see the logs from a container...
+#		kubectl logs pod/busybox2-5c774d4b8f-2tgg9
+
+
+#create the service object for a given pod or deplayment or ...
+#note:	--type=NodePort allows to creat some pods for your service inside your
+#		cluster (locally)
+#		--type=LoadBalancer creates a service in a cloud provider (assholes).
+	kubectl expose pod/hello-minikube1 --type=NodePort --port=80
+#command to understand how to expose an object (it will creat an object)
+	kubectl expose -h
+
+#to see the lables attached to each pods:
+	kubectl get pods --show-labels
+
+###############################################################################
+#to enable ingress, and then check
+#minikube addons list
+minikube addons enable ingress
+kubectl get pods -n kube-system
+
+#delete an ingress:
+#kc get ing , then do not forget to add the "ing/" in front of the ing 
+kc delete ing/ingress-name

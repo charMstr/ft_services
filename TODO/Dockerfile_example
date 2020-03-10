@@ -1,0 +1,59 @@
+#THE ADD INSTRUCTION COPIES NEW FILES, DIRECTORIES OR REMOTE FILE URLS
+#THEREFORE PREFER ADD TO COPY unless you dont  wan unpacking of archive files.
+#TO MAKE A COMMAND OPTIONAL BUT DEFAULT, PUT SOME PARAMETERS IN A CMD..
+#THEN USE AN ENTRYPOINT (THAT CANNOT BE OVERIDEN).
+
+FROM debian:buster
+
+#USEFUL FOR PROVIDING USERS WITH SUPPORT ADDRESS
+LABEL maintainer="charmstr@student.42.fr"
+LABEL version="1.0"
+
+#INSTALL NGINX, VIM, PHP-FPM RELATED, MARIADB, GETTEXT-BASE (ENVSUBST), OPENSSL
+RUN yes | apt-get update && yes | apt-get upgrade \
+	&& yes | apt-get install nginx \
+	&& apt install -y vim \
+	&& apt install -y php-fpm php-cli php-mysql php-mbstring \
+	&& apt install -y mariadb-server mariadb-client \
+	&& apt install -y gettext-base \
+	&& apt install -y openssl 
+
+#WORDPRESS, CREATION OF MY_SITE DIRECTORY, REMOVING THE TAR FILE
+ADD https://wordpress.org/latest.tar.gz /tmp
+COPY ./srcs/my_server /tmp
+RUN ln -s /etc/nginx/sites-available/my_server /etc/nginx/sites-enabled/ \
+	&& mkdir -p /var/www/my_server/my_site \
+	&& chown -R www-data:www-data /var/www/my_server/my_site \
+	&& tar xzf /tmp/latest.tar.gz --strip-components=1 -C /var/www/my_server/my_site \
+	&& rm /var/www/my_server/my_site/wp-config*.php \
+	#DISABLING THE DEFAULT BLOCK_SERVER FROM NGINX. +++
+	&& rm /etc/nginx/sites-enabled/default 
+ADD ./srcs/wp-config.php /var/www/my_server/my_site/wp-config-sample.php
+
+#PHP_MY_ADMIN, ADD FROM LINK, INSTALL, CHANGE OWNERSHIP
+ADD https://files.phpmyadmin.net/phpMyAdmin/5.0.1/phpMyAdmin-5.0.1-all-languages.tar.gz /tmp
+COPY ./srcs/config.inc.php /var/www/my_server/phpmyadmin/
+RUN mkdir -p /var/www/my_server/phpmyadmin \
+	&& tar xzf /tmp/phpMyAdmin-5.0.1-all-languages.tar.gz --strip-components=1 -C /var/www/my_server/phpmyadmin \
+	&& rm -rf /tmp/phpMyAdmin-5.0.1-all-languages.tar.gz \
+	&& rm /var/www/my_server/phpmyadmin/config.sample.inc.php \
+	&& mkdir -p /var/lib/phpmyadmin/tmp \
+	&& chown -R www-data:www-data /var/lib/phpmyadmin \
+	&& chown -R www-data:www-data /var/www/my_server/phpmyadmin
+
+#WORDPRESS DATABASE CREATION CONFIGURATION. INJECTION OF DATABASE
+COPY ./srcs/conf_mariadb /tmp
+COPY ./srcs/my_site.sql /tmp
+RUN /etc/init.d/mysql start && mariadb < /tmp/conf_mariadb \
+	&& mysql my_site -u root < /tmp/my_site.sql
+
+#EXAMPLE TO SET AN ENV VARIABLE
+ENV AUTO_INDEX=on
+
+EXPOSE 80 443
+
+#GENERATING AUTOSIGNED CERTIFICATES FOR SSL DEMO, NO PROMPT
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=FR/O=krkr/OU=Domain Control Validated/CN=*.krkr.io"
+COPY ./srcs/self-signed.conf /etc/nginx/snippets/
+
+CMD envsubst '$AUTO_INDEX' < /tmp/my_server > /etc/nginx/sites-available/my_server && /etc/init.d/nginx start && /etc/init.d/mysql restart && /etc/init.d/php7.3-fpm start && bash

@@ -1,0 +1,5 @@
+"kustomization" --> command pour lancer tous les .yaml d'un coup
+
+$ minikube addons enable ingress
+ingress was successfully enabled
+

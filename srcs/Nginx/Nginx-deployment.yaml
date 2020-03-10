@@ -1,0 +1,29 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  #note: the name is what is referenced in the ingress .yaml in field "serviceName:"
+spec:
+  selector:
+    matchLabels:
+      app: nginx-deployment
+      #note: matchLables and labels should be matching.
+      #they: both  should be different from one site to another if doing some
+      # name based virtual hosting
+  replicas: 1 # tells deployment to run 1 pod matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx-deployment
+    spec:
+      containers:
+      - name: whocares
+        image: my-nginx
+        imagePullPolicy: Never # Never try to download from online registry
+        ports:
+        - containerPort: 80
+          name: http
+          # if you want to attach to the container:
+          # kc exec pod/nginx-deployment-f7bffddb-sdbhm -ti /bin/bash 
+        - name: https
+          containerPort: 443
