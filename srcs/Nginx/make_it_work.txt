@@ -1,0 +1,3 @@
+in openrc:
+	#shows the current services running per run level.
+		rc-update show -v  
