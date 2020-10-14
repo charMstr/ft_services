@@ -1,25 +1,33 @@
-
 server {
-	listen 80;
-	listen [::]:80;
+	listen 443 ssl;
+	listen [::]:443 default ssl;
 
-	root /var/www/my_server;
-	index index.php index.html index.htm;
+	include /etc/nginx/snippets/self-signed.conf;
+	ssl on;
 
 	server_name loalhost www.localhost;
-
 	location / {
-		autoindex on;
-		#try_files	$uri $uri/ /index.php?$args;
-	    try_files $uri $uri/ =404;
+		root /var/www/my_server;
+		index index.php index.html index.htm;
 	}
+
+	#location /wordpress {
+		##do a redirect 307 vers IP :WPPORT
+	#}
+
+	#location /phpmyadmin {
+		##reverse proxy versIP :PMAPORT
+	#}
 }
 
-#server {
-#	listen 80;
-#	listen [::]:80;
-#
-#	server_name  localhost www.localhost;
-#
-#	return 302 https://$server_name$request_uri;
-#}
+server {
+			# if not using default_server,  it has to match the server_name
+			# directive exactly.
+		listen 80 default_server;
+		listen [::]:80 default_server;
+			# This is just an invalid value which will never trigger on a real
+			# hostname.
+		server_name _;
+			# redirection type 301 permanent redirect to the https version.
+		return 301 https://$host$request_uri;
+}
