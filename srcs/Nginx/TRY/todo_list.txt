@@ -1,9 +1,0 @@
-sshd: how to congigure the server part.
-		note:	the setup should be done for a root user.
-		-make sure the config is done
-		-make sure we can connect from the client using just a password and not
-		 an assymetric key.
-		-understand the if in this case yes or not i need to have a list of
-			valid keys somewhere.
-		-at the very last explore the creatino of a /etc/ssh/sshrc file that
-			says a custom hello!

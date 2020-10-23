@@ -1,0 +1,23 @@
+#build the image and give it a name
+docker build -t nginx .
+
+#start the container in detached mode, delete it when done, and bind ports
+docker run -d --rm -p 80:80 -p 443:443 -p 22:22 --name cont_nginx nginx
+
+#if you want to check that pid is one for nginx or sshd if no use of openrc
+docker exec -it cont_nginx top
+
+#if you want to shell into the running container
+docker exec -it cont_nginx /bin/sh 
+
+#if you want to tail the log file of nginx (remove the -f for a simple cat):
+docker logs -f cont_nginx
+
+#getting the container IP adress (using docker only, not kubernetes!)
+docker inspect cont_nginx | grep IP
+
+#ssh connection with debuging option (port 22 is default).
+ssh -vvv usert@<cont_nginx_IP>
+
+#ssh connection that will itself creat/add the known_hosts new key fingerprint
+ssh -o StrictHostKeyChecking=no user@172.17.0.2

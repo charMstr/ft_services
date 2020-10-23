@@ -1,0 +1,24 @@
+
+█████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ 
+
+
+ ██████╗██╗  ██╗ █████╗ ██████╗ ███╗   ███╗███████╗████████╗██████╗ 
+██╔════╝██║  ██║██╔══██╗██╔══██╗████╗ ████║██╔════╝╚══██╔══╝██╔══██╗
+██║     ███████║███████║██████╔╝██╔████╔██║███████╗   ██║   ██████╔╝
+██║     ██╔══██║██╔══██║██╔══██╗██║╚██╔╝██║╚════██║   ██║   ██╔══██╗
+╚██████╗██║  ██║██║  ██║██║  ██║██║ ╚═╝ ██║███████║   ██║   ██║  ██║
+ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝
+                                                                    
+	WARNING:
+For demo purpose: only "user" or "root" can ssh. ex: ssh user@...
+The password authentication (weak) has been disabled.
+Only assymetric cryptography authentication will function.
+
+Make sure to use on the client side the correct key pair that matches the
+server's .ssh/authorized_keys file.
+You will find this key pair in:
+	ft_service_project/srcs/Nginx/srcs_ssh/client_key_pair/
+Just place them in your ~/.ssh/ folder
+
+█████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ 
+
