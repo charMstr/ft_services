@@ -8,7 +8,7 @@ CURRENT_OS=`uname -s`
 echo "starting Minikube on $CURRENT_OS"
 if [ $CURRENT_OS = "Linux" ]
 then
-	minikube start --vm-driver=docker
+	minikube start --vm-driver=docker --cpus=2
 elif [ $CURRENT_OS = "Darwin" ]; then
 	minikube start --vm-driver=virtualbox --disk-size=10g --cpus=3 --memory=2448
 else
@@ -16,16 +16,15 @@ else
 	return		
 fi
 
-return
-
 #enable the dashboard
 minikube addons enable dashboard
-#enable the ingress controller.
-minikube addons enable ingress
-
 
 #MAKE THE DOCKERD AVAILABLE FROM WITHIN THE MINIKUBE
 eval $(minikube docker-env)
+
+######################   remove me later ####################################################
+return
+
 
 #NGINX
 cd ./srcs/Nginx

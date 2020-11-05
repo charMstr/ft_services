@@ -41,7 +41,8 @@ RUN chmod 700 /root/.ssh && chmod 600 /root/.ssh/authorized_keys
 RUN echo 'root:dummy' | chpasswd
 
 #add ssh user: "user", with password: "password"
-RUN adduser -D user && echo "user:password"|chpasswd
+RUN adduser -D user \
+	&& echo "user:password"|chpasswd
 #for secret authentication on user@<ip_adress_server> to work straight away,
 # add the authorized_keys file into /home/user/.ssh folder.
 COPY --chown=user ./srcs_ssh/authorized_keys /home/user/.ssh/authorized_keys
@@ -51,10 +52,11 @@ COPY srcs_ssh/motd /etc/motd
 COPY srcs_ssh/ssh_banner /tmp/ssh_banner
 
 #custom sshd_config (among other things disabling the password authentication).
+#only the ssh public key athentication is available.
 COPY /srcs_ssh/sshd_config /etc/ssh/sshd_config
 
 #make sure the ownership and permissions of the folder .ssh and file
-# authorized_keys are correct!
+# authorized_keys are correct for user "user".
 RUN chmod 700 /home/user/.ssh && chmod 600 /home/user/.ssh/authorized_keys
 
 #generate pairs of keys on host (here 3 different types of encryption)

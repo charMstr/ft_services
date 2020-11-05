@@ -17,7 +17,7 @@ docker logs -f cont_nginx
 docker inspect cont_nginx | grep IP
 
 #ssh connection with debuging option (port 22 is default).
-ssh -vvv usert@<cont_nginx_IP>
+ssh -vvv user@<cont_nginx_IP>
 
 #ssh connection that will itself creat/add the known_hosts new key fingerprint
 ssh -o StrictHostKeyChecking=no user@172.17.0.2
