@@ -1,0 +1,13 @@
+#build my image from the dockerfile
+docker build -t ftps .
+
+#start the docker container withe the correct ports being forwarded
+docker run -d --rm --name ftps_cont -p 21:21 -p 20:20 -p 30000:30000 ftps
+
+#as above but using a custom user or password, the -e needs to be before the
+# image name
+docker run -d --rm --name ftps_cont -p 21:21 -p 20:20 -p 30000:30000 -e __FTP_USR__= user2 ftps
+
+#use the lftp client to connect directly on localhost address,
+# using username and password:
+lftp -u user:password 127.0.0.1
