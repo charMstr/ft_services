@@ -15,8 +15,8 @@ the server should be using ftps (ftp over SSL or TLS).
 
 for training purpose: the user named "user" is chrooted in his home directory.
 
-log file redirection to docker log colleciton (through stdout) was not possible
-and the issues found on the internet have not been solved as of today.
+log file redirection to docker log collection (through stdout) is made with a
+tail -f. (sym link would not work).
 ###############################################################################
 
 ###############################################################################

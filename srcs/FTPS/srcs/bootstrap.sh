@@ -9,5 +9,11 @@ adduser -D $__FTP_USER__ && echo "$__FTP_USER__:$__FTP_PASSWORD__" | chpasswd
 #creat file of chrooted users, and add user to it
 echo "$__FTP_USER__" > /etc/vsftpd/chroot.list
 
+# make the logs available to docker:
+# creat the log file before we tail it.
+touch /var/log/vsftpd.log
+#tail -f in the background
+tail -f /var/log/vsftpd.log &
+
 #start vsftpd with its config file as argument
 usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
