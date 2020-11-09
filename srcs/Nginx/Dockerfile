@@ -7,7 +7,8 @@ RUN apk update \
 	#&& apk add openrc --no-cache \
 	&& apk add nginx &&  mkdir -p /run/nginx \
 	&& apk add openssl \
-	&& apk add openssh-server
+	&& apk add openssh-server \
+	&& rm -rf /var/cache/apk/*
 
 #creat basic environement variables. default value used if not changed.
 # those environement variables take effect in bootstrap.sh

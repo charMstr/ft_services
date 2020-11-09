@@ -1,0 +1,4 @@
+
+docker build -t mysql .
+
+docker run -it --rm --name mysql_cont mysql

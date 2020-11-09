@@ -1,7 +1,8 @@
 FROM alpine:latest
 
 RUN apk update && apk add openssl \
-	&& apk add vsftpd
+	&& apk add vsftpd \
+	&& rm -rf /var/cache/apk/*
 
 #creat basic environement variables. default value used if not changed.
 # those environement variables take effect in bootstrap.sh

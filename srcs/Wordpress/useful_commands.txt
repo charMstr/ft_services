@@ -1,0 +1,5 @@
+# build image
+docker build -t wordpress .
+
+# run image ... for now
+docker run -it --rm --name wordpress_cont -p 5050:5050 wordpress
