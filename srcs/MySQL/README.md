@@ -16,14 +16,16 @@ The mysqld (server version) in order to run first needs us to run the script:
 ```mysql_install_db```
 
 It will creat the data directory and build all the necessary system tables.
-It is good practice to provide the **--user argument**. It specifies the login
+It is good practice to provide the **--user=...** argument. It specifies the login
 user name to use for running mysqld. And Files and directories created by
 mysqld will be owned by this user. Therefor we can avoid running the server as
 root (dangerous practice).
 
-It is recommanded to start mysqld using a super_set script: `mysqld_safe`.
+It is recommanded to start mysqld using the script: `mysqld_safe`.
+It is a superset of the `mysqld` script with security enhancements.
 This script will make sure the **test** database and user are removed, and that
-root user only has grants locally (localhost).
+root user only has grants locally (localhost), and is not used to start the
+server.
 
 Unfortunately the `mysql_safe` script runs in the foreground forever.
 We wanted to kick off the server and in the meantime connect the client to it
@@ -45,13 +47,13 @@ used by the mysql client,
 
 ## ENV variables (and their default values).
 
-- __MYSQL_DB_NAME__ wordpress
-- __MYSQL_DB_USER__ user
-- __MYSQL_DB_PASSWD__ password
-- __MYSQL_DB_IP_CLIENT__ 0.0.0.0
+- \_\_MYSQL_DB_NAME\_\_ wordpress
+- \_\_MYSQL_DB_USER\_\_ user
+- \_\_MYSQL_DB_PASSWD\_\_ password
+- \_\_MYSQL_DB_IP_CLIENT\_\_ 0.0.0.0
 
-- __MYSQL_ADMIN__ mysql
-- __MYSQL_ADMIN_PASSWD__ password_admin
+- \_\_MYSQL_ADMIN\_\_ mysql
+- \_\_MYSQL_ADMIN_PASSWD\_\_ password_admin
 
-note: __MYSQL_DB_IP_CLIENT__ is first to any adress as default. but it could be
+note: \_\_MYSQL_DB_IP_CLIENT\_\_ is first to any adress as default. but it could be
 set to a precise adress when setting up a cluster.
