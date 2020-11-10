@@ -13,10 +13,31 @@ The server is placed inside /var/www/aha_archi (it is actually a symlink to
 
 ## IMPLEMENTATION DETAILS
 
-The user and password should be te same when running the mysql container.
+The user, password, and ip_host/ip_client in the wordpress container should
+match the mysql database container.
+
+Wrodpress is a php application.
+Nginx by default does not process php requests on its own.
+We will install php-fpm for this task. It is basically a FastCGI Process
+Manager (FPM).
+
+_**Note:**CGI (Common Gateway Interface) means all requests are redirected into
+a unique process. Unlike CGI, with FastCGI, a process runs independently of
+the Web server, isolating it and thus providing more security. Therefore
+php-fmp will be a single process handling **ALL** php scritps for Nginx (for
+all its requests) from the outside._
+
+## RUNNING PROCESSES IN THE SAME CONTAINER
+
+- Nginx
+- php-fpm7
 
 ## PORTS:
-Nginx is listening on the port 5050.
+
+- 5050
+
+Nginx is listening on the port 5050, this is internal to the cluster. (behind
+the metalLB load balancer or the main "Nginx container").
 
 ## ENV variables (and their default values).
 

@@ -11,7 +11,10 @@ ln -sf /dev/stderr /var/log/nginx/error.log
 wp_install.sh
 
 ### starting services ###
+# start the FastCGI php module as a daemon.
+# note: use "php-fpm7 -F" to start it in a daemon mode
+php-fpm7
 # start nginx as a non daemon
-#nginx -g "daemon off;"
+nginx -g "daemon off;"
 
-/bin/sh
+#/bin/sh
