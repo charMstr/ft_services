@@ -1,12 +1,15 @@
-[mysqld]
-#user = mysql
+[client-server] #options that are common between the clients and the server.
 port = 3306
-bind-address = 0.0.0.0
-socket=/run/mysqld/mysql.sock
-[mysql]
-#user = mysql
-password = pass
-port = 3306
-socket=/run/mysqld/mysql.sock
+socket=/run/mysqld/mysql.sock #command line equivalent: --socket=<path_to_file>
 
-## this file can be improved, with listening only on the correct IP maybe
+[mysqld] #options that concern only the server daemon
+#run mysql daemon as user
+user = mysql # command line equivalent: --user=<user>
+#note: In Debian and Ubuntu, the default bind_address is 127.0.0.1, which binds
+# the server to listen on localhost only.
+bind-address = 0.0.0.0 #command line equivalent: --bind-address=<addr>
+
+[mysql] #options that concern only the clients
+#password = password
+
+## note:this file can be improved, with listening only on the correct IP maybe

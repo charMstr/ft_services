@@ -14,7 +14,7 @@ ENV __MYSQL_ADMIN__ mysql
 ENV __MYSQL_ADMIN_PASSWD__ password_admin
 
 COPY srcs/bootstrap.sh usr/sbin/bootstrap.sh
-COPY srcs/my_mariadb_server.cnf /etc/my.cnf
+COPY srcs/my_mariadb_server.cnf /etc/my.cnf.d
 #COPY conf file
 
 EXPOSE 3306

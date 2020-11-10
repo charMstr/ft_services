@@ -41,5 +41,5 @@ sleep 2
 #deleting the tmp_file
 rm $tmp_file
 
-#starting the mysql server
-/usr/bin/mysqld_safe --user=mysql; --datadir="/var/lib/mysql/"
+#starting the mysql server daemon
+/usr/bin/mysqld_safe --datadir="/var/lib/mysql/"
