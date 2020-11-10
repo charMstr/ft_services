@@ -45,13 +45,13 @@ used by the mysql client,
 
 ## ENV variables (and their default values).
 
-ENV __MYSQL_DB_NAME__ wordpress
-ENV __MYSQL_DB_USER__ user
-ENV __MYSQL_DB_PASSWD__ password
-ENV __MYSQL_DB_IP_CLIENT__ 0.0.0.0
+- __MYSQL_DB_NAME__ wordpress
+- __MYSQL_DB_USER__ user
+- __MYSQL_DB_PASSWD__ password
+- __MYSQL_DB_IP_CLIENT__ 0.0.0.0
 
-ENV __MYSQL_ADMIN__ mysql
-ENV __MYSQL_ADMIN_PASSWD__ password_admin
+- __MYSQL_ADMIN__ mysql
+- __MYSQL_ADMIN_PASSWD__ password_admin
 
 note: __MYSQL_DB_IP_CLIENT__ is first to any adress as default. but it could be
 set to a precise adress when setting up a cluster.
