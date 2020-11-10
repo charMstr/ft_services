@@ -24,19 +24,22 @@ GRANT ALL ON $__MYSQL_DB_NAME__.* TO '$__MYSQL_DB_USER__'@'$__MYSQL_DB_IP_CLIENT
 FLUSH PRIVILEGES;
 EOF
 
+
 # It initializes the MySQL data directory and creates the system tables that it contains.
 # Specify the --user option to indicate the user name that mysqld should also creat.
 echo 'Initializing data directory and system necessary tables at standard place'
-mysql_install_db --user=mysql --datadir=/var/lib/mysql/  > /dev/null
+mysql_install_db --user=mysql --datadir=/var/lib/mysql/  #> /dev/null
 
 #since the mysqld_safe stays in the foreground forever. trick
 #quickly start the server, connect the mysql client to it and creat out database
 (/usr/bin/mysqld_safe &) && sleep 2 \
 && mysql < $tmp_file \
-&& killall mysqld 
+&& killall mysqld \
+&& sleep 2 # waiting for mysql to die
 
-# waiting for mysql to die
-sleep 2
+#Now that the server has been kicked off, thanks to the log-basename option we know the name of
+# the error log file and we can redirect it to stdout for docker.
+tail -f /var/lib/mysql/mysql_log_.err &
 
 #deleting the tmp_file
 rm $tmp_file

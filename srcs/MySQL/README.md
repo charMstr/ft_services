@@ -64,3 +64,17 @@ used by the mysql client,
 
 note: \_\_MYSQL_DB_IP_CLIENT\_\_ is first to any adress as default. but it could be
 set to a precise adress when setting up a cluster.
+
+## LOGS
+
+The prefix log name is set to _"mysql_log_"_ and can be modified in the .cnf
+file, thanks to the **log-basename** option. This prefix will be appended at
+the begining of all log files created. It makes the name of the log files
+independant of the host name, thus very usefull when using replication.
+
+The logs connected to docker(redirection to stdout) are the ones originating
+from the mysqld_safe script (also sending logs from mysqld).
+
+Logs from the database important actions(CREATE, ALTER, INSERT, UPDATE and
+DELETE) are also recorded,  thanks to the **_log-bin_** option. But for now
+they are not redirected to docker log collection.

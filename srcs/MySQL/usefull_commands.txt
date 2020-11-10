@@ -13,6 +13,9 @@ docker exec -it mysql_cont /bin/sh
 mysql
 
 # MYSQL COMMAND: show the different users in the database setup:
-select host, user, password from mysql.user;
+mysql> select host, user, password from mysql.user;
 # MYSQL COMMAND: show the existing database named: 'wordpress'
-SHOW DATABASES LIKE 'wordpress';
+mysql> SHOW DATABASES LIKE 'wordpress';
+
+#output the optoin variables effective when calling a specifiq mysql binary
+mysqld --print-defaults
