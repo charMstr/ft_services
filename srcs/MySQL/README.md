@@ -36,9 +36,11 @@ note: The mariadb-client is of no more use after this quick necessary set up.
 The admin is "mysql" and it has a configurable password.
 It also only has grants on local connexions for security reasons.
 
-## ports:
+## PORTS:
 
-Port 3306 is the default port for the classic MySQL protocol (port), which is
+- 3306 
+
+it is the default port for the classic MySQL protocol (port), which is
 used by the mysql client,
 
 ## ENV variables (and their default values).
