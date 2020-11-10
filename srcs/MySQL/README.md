@@ -33,7 +33,9 @@ so that we could creat a wordpress database and an associated user.
 To succeed in doing so we had to start mysqld_sqfe in a subshell and in the
 background, and wait for it to start.
 
-note: The mariadb-client is of no more use after this quick necessary set up.
+**Note:** The mariadb-client is of no more use after this quick necessary set up.
+But running another RUN layer at dockerfile level would actually enhance the
+image since, when trying to remove apt virtual paquets (apt **--virtual** option).
 
 The admin is "mysql" and it has a configurable password.
 It also only has grants on local connexions for security reasons.
@@ -43,7 +45,17 @@ that is place into /etc/my.cnf.d.
 The /etc/my.cnf is automatically created with the `mysqld_install_db` script
 and includes any file.cnf found in /etc/my.cnf.d directory.
 The equivalent command line sequences are written as comments.
-More options can be found [here](https://mariadb.com/kb/en/full-list-of-mariadb-options-system-and-status-variables/).
+
+## RESSOURCES:
+
+Regarding the configuration options file of mysql, on the oficial website can be
+found a guide at how they work in general:
+
+[https://mariadb.com/kb/en/configuring-mariadb-with-option-files/#options]
+
+and a through list of all available options:
+
+[https://mariadb.com/kb/en/full-list-of-mariadb-options-system-and-status-variables/]
 
 ## PORTS:
 
