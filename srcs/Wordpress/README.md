@@ -52,6 +52,7 @@ and starting the container._
 
 ## SECURITY:
 
-the table_prefix is not left to wp_ in order to avoid common sql injections.
-the salt keys are set and can be changed though the use of the script:
+The table_prefix is not left to wp_ in order to avoid common sql injections.
+In the wp-config file, the salt keys are set, thanks to the **[link](https://api.wordpress.org/secret-key/1.1/salt/)**
+from their official website and can be changed though the use of the script:
 `wp_salt_keys_reset.sh`
