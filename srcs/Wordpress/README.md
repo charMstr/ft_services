@@ -20,11 +20,11 @@ Nginx is listening on the port 5050.
 
 ## ENV variables (and their default values).
 
-- __WORDPRESS_DB_NAME__ wordpress
-- __WORDPRESS_DB_USERNAME__ user
-- __WORDPRESS_DB_PASSWORD__ password
-- __WORDPRESS_DB_HOST__ 127.0.0.1
-- __WORDPRESS_DB_TABLE_PREFIX__ aha_archi_wp_
+- \_\_WORDPRESS_DB_NAME\_\_ wordpress
+- \_\_WORDPRESS_DB_USERNAME\_\_ user
+- \_\_WORDPRESS_DB_PASSWORD\_\_ password
+- \_\_WORDPRESS_DB_HOST\_\_ 127.0.0.1
+- \_\_WORDPRESS_DB_TABLE_PREFIX\_\_ aha_archi_wp_
 
 ## SECURITY:
 
