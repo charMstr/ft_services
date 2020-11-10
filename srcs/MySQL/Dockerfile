@@ -6,11 +6,12 @@ RUN apk update \
 	&& rm -rf /var/cache/apk/*
 
 ENV __MYSQL_DB_NAME__ wordpress
-ENV __MYSQL_DB_USER__ mysql
+ENV __MYSQL_DB_USER__ user
 ENV __MYSQL_DB_PASSWD__ password
-ENV __MYSQL_DB_IP_HOST__ 0.0.0.0
+ENV __MYSQL_DB_IP_CLIENT__ 0.0.0.0
+
 ENV __MYSQL_ADMIN__ mysql
-ENV __MYSQL_ADMIN_PASSWD__ password2
+ENV __MYSQL_ADMIN_PASSWD__ password_admin
 
 COPY srcs/bootstrap.sh usr/sbin/bootstrap.sh
 COPY srcs/my_mariadb_server.cnf /etc/my.cnf
