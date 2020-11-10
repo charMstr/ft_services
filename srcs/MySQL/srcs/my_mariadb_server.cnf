@@ -1,0 +1,12 @@
+[mysqld]
+#user = mysql
+port = 3306
+bind-address = 0.0.0.0
+socket=/run/mysqld/mysql.sock
+[mysql]
+#user = mysql
+password = pass
+port = 3306
+socket=/run/mysqld/mysql.sock
+
+## this file can be improved, with listening only on the correct IP maybe

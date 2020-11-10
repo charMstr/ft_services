@@ -1,4 +1,18 @@
-
+#build image
 docker build -t mysql .
 
-docker run -it --rm --name mysql_cont mysql
+#run dontainer in detached mode
+# /!\ NEEDS PORT BINDING!!!
+docker run -d --rm --name mysql_cont mysql
+
+#exec sh into detached running container
+docker exec -it mysql_cont /bin/sh
+
+#Once inside the container -note: at this stage the mysqld (daemon) is started.
+#connect to server with mysql client 
+mysql
+
+# MYSQL COMMAND: show the different users in the database setup:
+select host, user, password from mysql.user;
+# MYSQL COMMAND: show the existing database named: 'wordpress'
+SHOW DATABASES LIKE 'wordpress';
