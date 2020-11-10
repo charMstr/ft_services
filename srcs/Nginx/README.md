@@ -60,9 +60,10 @@ stdin and stdout).
 same goes for the sshd errors.
 example of commands working:
 
-```docker logs -f nginx_container_name
-
-kubectl logs -f nginx_pod_name```
+```
+docker logs -f nginx_container_name
+kubectl logs -f nginx_pod_name
+```
 
 ## SSH CONNEXION: Reasons things did not work in the first place:
 
