@@ -1,4 +1,4 @@
-# MySQL container
+# MYSQL CONTAINER
 
 This readme is dedicated to the MySQL container, subpart of the ft_services
 project(school project, at 42).
@@ -52,7 +52,7 @@ More options can be found [here](https://mariadb.com/kb/en/full-list-of-mariadb-
 it is the default port for the classic MySQL protocol (port), which is
 used by the mysql client,
 
-## ENV variables (and their default values).
+## ENV VARIABLES (and their default values):
 
 - \_\_MYSQL_DB_NAME\_\_ wordpress
 - \_\_MYSQL_DB_USER\_\_ user
