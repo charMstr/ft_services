@@ -1,4 +1,4 @@
-# Wordpress container
+# WORDPRESS CONTAINER
 
 This readme is dedicated to the Wordpress container, subpart of the ft_services
 project(school project, at 42).
@@ -25,6 +25,9 @@ Nginx is listening on the port 5050.
 - \_\_WORDPRESS_DB_PASSWORD\_\_ password
 - \_\_WORDPRESS_DB_HOST\_\_ 127.0.0.1
 - \_\_WORDPRESS_DB_TABLE_PREFIX\_\_ aha_archi_wp_
+
+_Mainly used for dynamically updating the **wp-config.php** file when building image
+and starting the container._
 
 ## SECURITY:
 
