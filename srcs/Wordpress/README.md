@@ -27,6 +27,12 @@ the Web server, isolating it and thus providing more security. Therefore
 php-fmp will be a single process handling **ALL** php scritps for Nginx (for
 all its requests) from the outside._
 
+The mysql client is part of the php dependencies. Since we use a php 7 version,
+the old php-mysql packages needs to be replaced by php-mysqli packages.
+
+In the wordpress installation folder, activate the debug option within the file
+wp-config.php and life will be easier while troubleshoting.
+
 ## RUNNING PROCESSES IN THE SAME CONTAINER
 
 - Nginx
