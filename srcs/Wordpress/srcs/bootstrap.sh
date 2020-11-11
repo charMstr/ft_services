@@ -7,9 +7,6 @@ mkdir -p /run/nginx
 ln -sf /dev/stdout /var/log/nginx/access.log
 ln -sf /dev/stderr /var/log/nginx/error.log
 
-### WORDPRESS ###
-wp_install.sh
-
 ### starting services ###
 # start the FastCGI php module as a daemon.
 # note: use "php-fpm7 -F" to start it in a daemon mode
