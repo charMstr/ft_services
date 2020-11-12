@@ -46,6 +46,25 @@ The /etc/my.cnf is automatically created with the `mysqld_install_db` script
 and includes any file.cnf found in /etc/my.cnf.d directory.
 The equivalent command line sequences are written as comments.
 
+
+The mysql server will be started with the "mysql" system account.(root should
+be avoided for security reasons).
+ When installing the mysql server with the script mysql_install_db, a mysql
+ database admin account is created along with the same name. We will change its
+name and give it a new password.
+We also make sure it is only able to connect locally (security reasons). This
+user has super right over the entirity of the databases, including the
+wordpress database, but also the system tables etc.
+
+We created a user that is only being granted access to the wordpress
+database, and not the entire set of databases in the mysql server. This user
+will be able to connect remotely.
+
+### TIP: the DB_USER in the wp-config.php file will be the user connecting the 
+database as a client, it will in our case access the wordpress database.
+Within this database, we will find in the subtable wp_users the different 
+wordpress users like admins, editors etc. DB_USER and wp_users are two different things.
+
 ## RESSOURCES:
 
 Regarding the configuration options file of mysql, on the oficial website can be
@@ -99,6 +118,5 @@ contains a line that makes it available only on localhost.
 
 A simple error in the file being redirect into the mysql client for the
 creation of the database would stop the container. It is probably a fail-safe
-proof behavior from the mysqld_safe script, not allowing us to start the daemon
-as long as the password for the mysql user has not been set?
+proof behavior from the mysqld_safe script.
 
