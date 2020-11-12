@@ -107,7 +107,10 @@ But make sure you start them in the _**my_network_name**_ you just created.
 example:
 ```
 docker run -d --rm --name mysql_cont -p 3306:3306 --network=**my_network_name** mysql ;
+docker inspect mysql_cont | grep IPAddress
 ``` 
+_note: the wordpress container should use in its wp-config.php file the address
+of the mysql\_cont we just created._
 
 Now ou should be able to connect successfully to your msql container and its
 server if you enter in your search engine **localhost:5050**.
