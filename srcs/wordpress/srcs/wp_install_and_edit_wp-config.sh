@@ -4,7 +4,6 @@
 mkdir -p /usr/share/webapps
 chown -R nginx:www-data /usr/share/webapps/
 
-
 # unzip the latest version of wordpress in directory.
 tar -xzf /tmp/latest.tar.gz  -C /usr/share/webapps/
 #clean the /tmp folder

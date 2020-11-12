@@ -9,15 +9,23 @@ user = mysql # command line equivalent: --user=<user>
 # the server to listen on localhost only.
 bind-address = 0.0.0.0 #command line equivalent: --bind-address=<addr>
 
-#activate recording of all changes to the databases, both data and structure
+### trying to correct an error
+max_allowed_packet=500M
+
+#activate recording of all important changes to the databases, both data and
+# structure
 log-bin=bin_log
 #This sets all log file names at once (in 'datadir'). and is particularly 
 # recommanded if you use replication as it ensures that logfile names are
 # independant from host name.
 log-basename=mysql_log_
 
+# set general logs (connects and disconnects).
+general_log #since the log-basename is set: mysql_log_.log will be created
+
 
 [mysql] #options that concern only the clients
+#user = mysql
 #password = password
 
 ## note:this file can be improved, with listening only on the correct IP maybe

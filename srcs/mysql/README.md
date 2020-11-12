@@ -90,3 +90,15 @@ from the mysqld_safe script (also sending logs from mysqld).
 Logs from the database important actions(CREATE, ALTER, INSERT, UPDATE and
 DELETE) are also recorded,  thanks to the **_log-bin_** option. But for now
 they are not redirected to docker log collection.
+
+## REASONS IT DID NOT WORK
+
+The default mariadb-server.cnf conf file found at the /etc/my.cnf.d/ location
+contains a line that makes it available only on localhost.
+`skip-networking` option should be commented out (off by default).
+
+A simple error in the file being redirect into the mysql client for the
+creation of the database would stop the container. It is probably a fail-safe
+proof behavior from the mysqld_safe script, not allowing us to start the daemon
+as long as the password for the mysql user has not been set?
+

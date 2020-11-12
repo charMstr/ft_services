@@ -1,8 +1,0 @@
-# build image
-docker build -t wordpress .
-
-# run container from image in detached mode
-docker run --rm --name wordpress_cont -p 5050:5050 -d wordpress
-
-# exec shell in detached container
-docker exec -it wordpress_cont /bin/sh

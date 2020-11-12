@@ -3,7 +3,7 @@ docker build -t mysql .
 
 #run dontainer in detached mode
 # /!\ NEEDS PORT BINDING!!!
-docker run -d --rm --name mysql_cont mysql
+docker run -d --rm --name mysql_cont -p 3306:3306 mysql
 
 #exec sh into detached running container
 docker exec -it mysql_cont /bin/sh
@@ -19,3 +19,10 @@ mysql> SHOW DATABASES LIKE 'wordpress';
 
 #output the optoin variables effective when calling a specifiq mysql binary
 mysqld --print-defaults
+
+# creat local docker network
+docker network create mon_reseau
+
+#run the container within this network, and inspect for the ip adress within it
+docker run -d --rm --name mysql_cont -p 3306:3306 --network=mon_reseau mysql ;
+docker inspect mysql_cont

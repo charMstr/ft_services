@@ -1,0 +1,17 @@
+# build image
+docker build -t wordpress .
+
+# run container from image in detached mode
+docker run --rm --name wordpress_cont -p 5050:5050 -d wordpress
+
+# run container from image in detached mode with the debug page
+docker run --rm --name wordpress_cont -p 5050:5050 -p 5051:5051-d wordpress
+
+# exec shell in detached container
+docker exec -it wordpress_cont /bin/sh
+
+# when trying to connec to a specific network, to the mysql container
+docker run --rm --name wordpress_cont -d -p 5050:5050 -p 5051:5051 --network=mon_reseau -e __WORDPRESS_DB_HOST__=172.20.0.2 wordpress;
+docker exec -it wordpress_cont /bin/sh ;
+docker rm -f wordpress_cont 
+
