@@ -3,15 +3,20 @@
 This is a README.md for my peers working on the same school project at 42.
 I intend to give here interesting tips and hints based on my experience on how
 to approach this project as it can be complexe to get the big picture at first.
+Hopefully this will give you some usefull guidance and prevent you from just
+copy/pasting too much.
 
-## GOOD APPROACH FROM MY EXPERIENCE
+_note: each subparts of the ./srcs folder has its own readme with some usefull
+details and tips about why things workded or did not._
+
+## Good approach according to my personal experience:
 
 According to my experience on this project, and if i had to redo it, my
 approach would be to follow the following list. But also to not be ashamed with
 reading other students projects. Its all about configuration, there is no need
 to stay stuck for three days because we are missing a line or a character.
 
-### 1) Understanding what is kubernetes.
+### 1) Understanding what is kubernetes:
 
 Kubernetes is a container orchestration tool.
 It will allow you to deploy your app in a fragmented way (microservices style).
@@ -24,7 +29,7 @@ One of the most interesting advantage of using a microservices architecture is
 the fact that you can update a small part of your app in general, without
 stopping the application from running.
 
-### 2) Things you need to understand before working from ground to top.
+### 2) Things you need to understand before working from ground to top:
 
 All you need to know before starting is the concept that when deploying your
 cluster, you will need to be able to interconnect your containers together.
@@ -33,7 +38,7 @@ For this interconnection to be possible, you will need to master how to run
 docker images and passing to then environment variables or arguments, in order
 to tune their configuration at boot time.
 
-### 3) Master building your custom images.
+### 3) Master building your custom images:
 
 Maybe a good idea to start with the things you already know like Nginx server,
 or explore the ftps server image.
@@ -58,12 +63,12 @@ docker logs -f _**container_name**_
 Always try to undertand the different type of logs a binary can produce for you
 and if some debug options can be activated.
 
-### 4) interconnecting containers locally.
+### 4) interconnecting containers locally:
 
 It is possible to get your containers to work with each others without 
 deploying your cluster through kubernetes.
 
-#### You could start with your mysql and wordpress containers.
+#### You could start with your mysql and wordpress containers:
 
 You don't need phpmyadmin container in the way (its tool that makes it easier
 to access the database through a friendly graphical interface). You can make
@@ -71,7 +76,7 @@ your wordpress website work with only the "_wordpress_" and the "_mysql_"
 containers. Knowing its possible will help you go through with less possible
 bugs.
 
-#### steps you can take if you have problem connecting the two properly
+#### Steps you can take if you have problem connecting the two properly:
 
 - try to open your browser with localhost:5050
 
@@ -90,15 +95,13 @@ remote connection.
 - activate the debug mode in wp-config.php on the container where wordpress is
 installed.
 
-#### sugestion of the commands that worked for me.
+#### Sugestion of the commands that worked for me:
 
-I could finally
-
-I suggest you first creat a docker network:
+First creat a docker network:
 ```
 docker network create _**my_newtork_name**_
 ```
-Thenk I suggest you try to build and run:
+Then I suggest you try to build and run:
 
 - your _wordpress_ container (with its own nginx server listening on port 5050)
 - your _mysql_ container (mysqld is a server itself)
@@ -115,14 +118,14 @@ of the mysql\_cont we just created._
 Now ou should be able to connect successfully to your msql container and its
 server if you enter in your search engine **localhost:5050**.
 
-### understand and start minikube on your local machine
+### 5) Understand and start minikube on your local machine:
 
 minikube will allow you to deploy your app in a cluster that is a small version
 reserved for development.
 
 At least be able to creat one kubernetes object with the kubectl cli.
 
-### creating your .yaml files. understanding their synthax
+### 6) Creating your .yaml files, understanding their synthax:
 
 Those will allow you to deploy your kubernetes objects without manually writing
 all the option on the command line interface
