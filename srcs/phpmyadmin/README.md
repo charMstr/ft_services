@@ -46,3 +46,15 @@ good exercice.
 ## LOGS
 
 nginx logs are made available to docker.
+
+same goes for php-fpm
+
+## TIPS and REASONS IT DID NOT WORK
+
+First make sure you can access the phpMyAdmin initial page asking for usename
+and   password through [http://localhost:5000], this requires installing phpmyamdin application, setting up the nginx server to redirect to its root folder throug php-fmp. (start nginx and php-fpm).
+
+Once you have correctly access that, try to access:
+[http://localhost:5000/setup/index.php]
+This will show you if there is some missing packets. (i missed php7-bz2 for
+example).
