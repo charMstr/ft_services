@@ -8,4 +8,4 @@ docker run -it --rm --name phpmyadmin_cont -p 5000:5000 phpmyadmin
 docker run -d --rm --name phpmyadmin_cont -p 5000:5000 phpmyadmin
 
 # run in a network, change the value of the DB_HOST
-docker run -d --rm --name phpmyadmin_cont -p 5000:5000 --network=mon_reseau -e __WORDPRESS_DB_HOST__=172.20.0.2 phpmyadmin
+docker run -d --rm --name phpmyadmin_cont -p 5000:5000 --network=mon_reseau -e __DB_HOST__=172.20.0.2 phpmyadmin
