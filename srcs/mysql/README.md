@@ -34,11 +34,9 @@ To succeed in doing so we had to start mysqld_sqfe in a subshell and in the
 background, and wait for it to start.
 
 **Note:** The mariadb-client is of no more use after this quick necessary set up.
-But running another RUN layer at dockerfile level would actually enhance the
-image since, when trying to remove apt virtual paquets (apt **--virtual** option).
-
-The admin is "mysql" and it has a configurable password.
-It also only has grants on local connexions for security reasons.
+But running another RUN layer to delete those related packages at dockerfile
+level would actually increase the overall image size
+(even  when trying to remove apt virtual paquets with _apt **--virtual**_ option).
 
 For training purpose the configuration options have been written in a .cnf file
 that is place into /etc/my.cnf.d.
@@ -46,11 +44,10 @@ The /etc/my.cnf is automatically created with the `mysqld_install_db` script
 and includes any file.cnf found in /etc/my.cnf.d directory.
 The equivalent command line sequences are written as comments.
 
-
 The mysql server will be started with the "mysql" system account.(root should
 be avoided for security reasons).
- When installing the mysql server with the script mysql_install_db, a mysql
- database admin account is created along with the same name. We will change its
+When installing the mysql server with the script mysql_install_db, a mysql
+database admin account is created along with the same name. We will change its
 name and give it a new password.
 We also make sure it is only able to connect locally (security reasons). This
 user has super right over the entirity of the databases, including the
@@ -58,12 +55,19 @@ wordpress database, but also the system tables etc.
 
 We created a user that is only being granted access to the wordpress
 database, and not the entire set of databases in the mysql server. This user
-will be able to connect remotely.
+will be able to connect remotely (used by the wordpress container for example).
 
-### TIP: the DB_USER in the wp-config.php file will be the user connecting the 
-database as a client, it will in our case access the wordpress database.
+### TIP: DB_USER vs wp_user
+
+the DB_USER in the wp-config.php file will be the user connecting the 
+database as a client, it will in our case access the wordpress database on the
+mysql server container.
+
 Within this database, we will find in the subtable wp_users the different 
-wordpress users like admins, editors etc. DB_USER and wp_users are two different things.
+wordpress users like admins, editors etc. 
+
+DB_USER is for the mysql client (used by wordpress to access its databse), and
+wp_users are stored within the database on the server it tries to connect to.
 
 ## RESSOURCES:
 
