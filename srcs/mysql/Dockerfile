@@ -16,6 +16,8 @@ ENV __MYSQL_ADMIN_PASSWD__ password_admin
 
 COPY srcs/bootstrap.sh usr/sbin/bootstrap.sh
 COPY srcs/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
+COPY srcs/init_my_db.sh /usr/sbin/
+COPY srcs/wordpress_dump.sql /tmp/
 
 EXPOSE 3306
 

@@ -12,6 +12,9 @@ Good practice has been followed.
 
 ## IMPLEMENTATION DETAILS & SECURITY GOOD PRACTICE
 
+The test databse is removed (automatically created).
+
+#### mysqld
 The mysqld (server version) in order to run first needs us to run the script:
 ```mysql_install_db```
 
@@ -23,21 +26,22 @@ root (dangerous practice).
 
 It is recommanded to start mysqld using the script: `mysqld_safe`.
 It is a superset of the `mysqld` script with security enhancements.
-This script will make sure the **test** database and user are removed, and that
-root user only has grants locally (localhost), and is not used to start the
-server.
+This script will make sure the mysqld daemon will restart if crashed, or kill
+with a sigkill signal.
 
 Unfortunately the `mysql_safe` script runs in the foreground forever.
 We wanted to kick off the server and in the meantime connect the client to it
 so that we could creat a wordpress database and an associated user.
-To succeed in doing so we had to start mysqld_sqfe in a subshell and in the
-background, and wait for it to start.
+To succeed in doing so we could have started mysqld_safe in a subshell and in the
+background, and wait for it to start. But we chose connect the client to it in
+a subscript blocked by an until loop.
 
 **Note:** The mariadb-client is of no more use after this quick necessary set up.
 But running another RUN layer to delete those related packages at dockerfile
 level would actually increase the overall image size
 (even  when trying to remove apt virtual paquets with _apt **--virtual**_ option).
 
+#### my.cnf file
 For training purpose the configuration options have been written in a .cnf file
 that is place into /etc/my.cnf.d.
 The /etc/my.cnf is automatically created with the `mysqld_install_db` script

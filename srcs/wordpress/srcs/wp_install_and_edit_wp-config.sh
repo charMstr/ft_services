@@ -30,7 +30,7 @@ sed -i "s/localhost/${__WORDPRESS_DB_HOST__}/" wp-config.php
 sed -i "s/'wp_'/'$__WORDPRESS_DB_TABLE_PREFIX__'/" wp-config.php
 
 #run the script that will set/change the salt keys automatically in wp-config.php
-#wp_salt_keys_reset.sh
+wp_salt_keys_reset.sh
 
 cd -
 ################ DONE EDITING wp-config.php
