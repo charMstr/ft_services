@@ -58,3 +58,11 @@ Once you have correctly access that, try to access:
 [http://localhost:5000/setup/index.php]
 This will show you if there is some missing packets. (i missed php7-bz2 for
 example).
+
+Once everything worked perfectly, i tried to edit my admin user or add new
+one through phpmyadmin. It worked but i could not connect:
+_Error: The password you entered for the username admin is incorrect._
+
+when updating the user_pass value in wp_users table, make sure you use MD5,
+using no encryption method was the problem. Also make sure in the wp_usermeta
+table to have the correct prefix: "wp\_" or your curstom on.
