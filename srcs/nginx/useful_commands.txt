@@ -2,7 +2,10 @@
 docker build -t nginx .
 
 #start the container in detached mode, delete it when done, and bind ports
-docker run -d --rm -p 80:80 -p 443:443 -p 22:22 --name cont_nginx nginx
+docker run -d --rm -p 80:80 -p 443:443 -p 22:22 --name nginx_cont nginx
+
+#start in docker network, with the ip adress of the phpmyadmin and wordpress.
+docker run -d --rm -p 80:80 -p 443:443 -p 22:22 --name nginx_cont --network=mon_reseau -e __PHPMYADMIN_IP__=172.24.0.3 -e __WORDPRESS_IP__=172.24.0.4 nginx
 
 #if you want to check that pid is one for nginx or sshd if no use of openrc
 docker exec -it cont_nginx top

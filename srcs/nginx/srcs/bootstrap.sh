@@ -7,7 +7,11 @@ ln -sf /dev/stdout /var/log/nginx/access.log
 ln -sf /dev/stderr /var/log/nginx/error.log
 
 #generating autosigned certificates for ssl demo (no prompt).
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=FR/O=krkr/OU=Domain Control Validated/CN=*.krkr.io" 2>&1 >/dev/null
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=FR/O=krkr/OU=Domain Control Validated/CN=*.krkr.io" 2>&1 >/dev/null
+
+#substitute the env variables in the server config
+envsubst '$__WORDPRESS_IP__ $__PHPMYADMIN_IP__'  < /tmp/server_config > /etc/nginx/conf.d/default.conf
+rm /tmp/server_config
 
 ###############################################################################
 #### SSH:
@@ -22,14 +26,17 @@ echo 'root:dummy' | chpasswd &>/dev/null
 adduser -D $__SSH_USER__ &>dev/null
 echo "$__SSH_USER__:$__SSH_PASSWORD__"|chpasswd &>dev/null
 
+#place the authorized key of the clients in the new user home directory.
+cp /tmp/authorized_keys /home/$__SSH_USER__/.ssh/authorized_keys
 #make sure the ownership and permissions are correct for user "user.
-chmod 700 /home/user/.ssh
-chmod 600 /home/user/.ssh/authorized_keys
+chmod 700 /home/$__SSH_USER__/.ssh
+chmod 600 /home/$__SSH_USER__/.ssh/authorized_keys
 
 #generate pairs of keys on host (here 3 different types of encryption)
-RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa && \
-	ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa && \
-	ssh-keygen -f /etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
+ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
+ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
+ssh-keygen -f /etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
+
 
 ###############################################################################
 #### STARTING SERVICES:

@@ -1,23 +1,31 @@
 server {
-	listen 443 ssl;
+	listen 443 ssl default ssl;
 	listen [::]:443 default ssl;
 
 	include /etc/nginx/snippets/self-signed.conf;
-	ssl on;
 
 	server_name loalhost www.localhost;
 	location / {
 		root /var/www/my_server;
 		index index.php index.html index.htm;
 	}
+	
+	location /wordpress {
+		rewrite ^ $uri/;
+	}
+		
+	location /wordpress/ {
+		return 307 http://$__WORDPRESS_IP__:5050/;
+	}
 
-	#location /wordpress {
-		##do a redirect 307 vers IP :WPPORT
-	#}
+	location /phpmyadmin {
+		rewrite ^ $uri/;
+	}
 
-	#location /phpmyadmin {
+	location /phpmyadmin/ {
 		##reverse proxy versIP :PMAPORT
-	#}
+		proxy_pass http://$__PHPMYADMIN_IP__:5000/;
+	}
 }
 
 server {

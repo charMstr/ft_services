@@ -84,3 +84,23 @@ kubectl logs -f nginx_pod_name
 		password!) as root.
 
 _tip: use the "**-vvv**" option when starting ssh for maximum debug messages._
+
+## REVERSE PROXY TO PHPMYADMIN CONTAINER
+
+	it is a one liner:
+	```
+	location /wordpress { 
+		proxy_pass <ip>:port/;
+	}
+	```
+reasons it did not work: the _**/wordpress**_ will be appended to <ip>:port
+`<ip>:port/wordpress` and this is probably not an existing location or page
+on the proxyed server.
+
+**_TIP_** __MAKE SURE you add the trailing '/' at the end of the proxy_pass line.__
+
+## 307 REDIRECT TO WORDPRESS CONTAINER
+
+when accessing the nginx container with URI _/wordpress_ (i also implemented 
+_/wordpress/_) there is a 307 temporary redirect implemented. The browser will
+change the address in the URL.

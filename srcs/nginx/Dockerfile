@@ -6,14 +6,18 @@ FROM alpine:latest
 RUN apk update \
 	#&& apk add openrc --no-cache \
 	&& apk add nginx &&  mkdir -p /run/nginx \
+	&& mkdir -p /var/www/my_server \
 	&& apk add openssl \
 	&& apk add openssh-server \
+	&& apk add gettext \
 	&& rm -rf /var/cache/apk/*
 
 #creat basic environement variables. default value used if not changed.
 # those environement variables take effect in bootstrap.sh
-ENV __SSH_USER__ user
-ENV __SSH_PASSWORD__ password
+ENV __SSH_USER__=user
+ENV	__SSH_PASSWORD__=password
+ENV __PHPMYADMIN_IP__=172.24.0.4
+ENV __WORDPRESS_IP__=172.24.0.3
 
 # note: this is just documentation between the guy that writes the dockerfile
 # and the guy that will launch the docker run command. it does not publish any
@@ -23,8 +27,7 @@ EXPOSE 80 443 22
 ### NGINX SETUP ###
 #copy server_config file and place the webpage
 #note: make it default otherwise it doesnt work for some reason.
-COPY ./srcs/srcs_nginx/server_config /etc/nginx/conf.d/default.conf
-RUN mkdir -p /var/www/my_server
+COPY ./srcs/srcs_nginx/server_config  /tmp/
 COPY ./srcs/srcs_nginx/index.html /var/www/my_server/index.html
 COPY ./srcs/srcs_nginx/self-signed.conf /etc/nginx/snippets/
 
@@ -33,7 +36,7 @@ COPY ./srcs/srcs_nginx/self-signed.conf /etc/nginx/snippets/
 COPY ./srcs/srcs_ssh/authorized_keys /root/.ssh/authorized_keys
 #for secret authentication on user@<ip_adress_server> to work straight away,
 # add the authorized_keys file into /home/user/.ssh folder.
-COPY --chown=user ./srcs/srcs_ssh/authorized_keys /home/user/.ssh/authorized_keys
+COPY ./srcs/srcs_ssh/authorized_keys /tmp 
 #custom message of the day replaced for fun
 COPY ./srcs/srcs_ssh/motd /etc/motd
 #custom ssh banner added for fun
