@@ -13,6 +13,20 @@ Good practice has been followed.
 ## IMPLEMENTATION DETAILS & SECURITY GOOD PRACTICE
 
 The test databse is removed (automatically created).
+This is a database container, it is therefore a statefull service.
+
+#### STATEFUL SET SERVICE
+We will need to mount a Volume. The Volume will be mounted on the container at:
+
+`/var/lib/mysql/`
+
+Because this is where the mysql databse is stored by mysql.
+
+_note: The very first time you mount the volume, if its empty, it will be
+populated by whaterver lays in /var/lib/mysql (on the container "filesystem").
+
+The Next time, since the Volume is not empty, its content will obscure whatever
+lays in /var/lib/mysql (on the container "filesystem")._
 
 #### MYSQLD
 The mysqld (server version) in order to run first needs us to run the script:
@@ -133,3 +147,7 @@ found a guide at how they work in general:
 and a through list of all available options:
 
 [https://mariadb.com/kb/en/full-list-of-mariadb-options-system-and-status-variables/]
+
+Regarding Persistent Volume Storage for the database:
+
+[http://www.ethernetresearch.com/docker/docker-tutorial-persistent-storage-volumes-and-stateful-containers/]

@@ -26,3 +26,12 @@ docker network create mon_reseau
 #run the container within this network, and inspect for the ip adress within it
 docker run -d --rm --name mysql_cont -p 3306:3306 --network=mon_reseau mysql ;
 docker inspect mysql_cont
+
+#creat a volume, insect it
+docker volume create my_database
+docker volume ls
+docker inspect my_database
+
+#run the container and the Volume to /var/lib/mysql
+docker run -d --rm --name mysql_cont -p 3306:3306 --network=mon_reseau -v my_database:/var/lib/mysql mysql ;
+
