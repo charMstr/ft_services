@@ -9,11 +9,9 @@ The nginx server is designed to run in a container build from scratch from a
 light weight base image: alpine linux, and will then be deployed in a
 kubernetes cluster. It will be a hub connexion, acting as a gateway and
 redirecting queries to the wordpress container (and its own nginx), and to the
-phpmyadmi container(and its own nginx again).
+phpmyadmin container(and its own nginx again).
 
 ## IMPLEMENTATION DETAILS & SECURITY GOOD PRACTICE
-
-#### DOCKERFILE
 
 In a real world application, we would run most oftenly one service per
 container.
@@ -37,7 +35,7 @@ For the ssh connexion, I chose not to just set no password, nor use a password.
 For good practice I chose to use an assymetric key pair authentication method
 (much stronger security).
 When the image is built, new host keys are generated on the server side, and 
-the _.ssh/authorized_keys_ file will already contain one specific public key.
+the _.ssh/authorized\_keys_ file will already contain one specific public key.
 that specific public key and its matching private key are found into
 _srcs\_ssh/client\_key\_pair/_ and will need to be adopted on the client side for
 demo purpose.
@@ -76,8 +74,10 @@ implemented.
 Port 22 is where sshd is actively listening for an incoming ssh connexion.
 
 ## ENV VARIABLES (and their default values):
-- \_\_SSH_USER\_\_ user
-- \_\_SSH_PASSWORD\_\_ password
+- \_\_SSH\_USER\_\_=user
+- \_\_SSH\_PASSWORD\_\_=password
+- \_\_PHPMYADMIN\_IP\_\_=172.24.0.4
+- \_\_WORDPRESS\_IP\_\_=172.24.0.3
 
 _used to creat a new system user and set its password._
 

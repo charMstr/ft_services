@@ -6,8 +6,8 @@ RUN apk update && apk add openssl \
 
 #creat basic environement variables. default value used if not changed.
 # those environement variables take effect in bootstrap.sh
-ENV __FTP_USER__ user
-ENV __FTP_PASSWORD__ password
+ENV __FTP_USER__=user
+ENV __FTP_PASSWORD__=password
 
 #replace the original conf file with our customed one.
 COPY ./srcs/vsftpd.conf /etc/vsftpd/vsftpd.conf
