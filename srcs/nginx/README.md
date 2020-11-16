@@ -1,6 +1,6 @@
 # NGINX CONTAINER
 
-This readme is dedicated to the NGINX server subpart of the ft_services
+This readme is dedicated to the NGINX server subpart of the ft\_services
 project. (school project, at 42.)
 
 ## OVERVIEW
@@ -15,15 +15,21 @@ phpmyadmi container(and its own nginx again).
 
 #### DOCKERFILE
 
-In a real world application, we would run only one service per container.
+In a real world application, we would run most oftenly one service per
+container.
 Here I had to run openssl and nginx in the same one (school subject).
 But I still chose for training purpose to avoid using an init system (in our
-alpine linux case: Openrc) and start individually each binaries.
-Caveat: if we kill nginx sshd will still run, the container still runs.
+alpine linux case Openrc would be the lighter option) and start individually
+each binaries.
+I implemented a script checking the liveliness of those two.
 
 The services are started in a script.
 Nginx is started in the foreground so that the command never ends (the
 container keeps running even in detached mode).
+
+## RUNNING PROCESSES:
+- nginx
+- ssh
 
 #### SSH
 
@@ -33,9 +39,31 @@ For good practice I chose to use an assymetric key pair authentication method
 When the image is built, new host keys are generated on the server side, and 
 the _.ssh/authorized_keys_ file will already contain one specific public key.
 that specific public key and its matching private key are found into
-_srcs_ssh/client_key_pair/_ and will need to be adopted on the client side for
+_srcs\_ssh/client\_key\_pair/_ and will need to be adopted on the client side for
 demo purpose.
 
+#### NGINX
+
+##### REVERSE PROXY TO PHPMYADMIN CONTAINER
+
+	it is a one liner:
+	```
+	location /wordpress { 
+		proxy\_pass <ip>:port/;
+	}
+	```
+reasons it did not work: the _**/wordpress**_ will be appended to <ip>:port
+`<ip>:port/wordpress` and this is probably not an existing location or page
+on the proxyed server.
+
+**_TIP_** _MAKE SURE you add the trailing '/' at the end of the proxy\_pass line._
+**_TIP_** **RTFM!**
+
+##### 307 REDIRECT TO WORDPRESS CONTAINER
+
+when accessing the nginx container with URI _/wordpress_ (i also implemented 
+_/wordpress/_) there is a 307 temporary redirect implemented. The browser will
+change the address in the URL.
 
 ## PORTS:
 
@@ -51,7 +79,7 @@ Port 22 is where sshd is actively listening for an incoming ssh connexion.
 - \_\_SSH_USER\_\_ user
 - \_\_SSH_PASSWORD\_\_ password
 
-_used to creat a new system user and set its password.
+_used to creat a new system user and set its password._
 
 ## LOGS
 
@@ -84,23 +112,3 @@ kubectl logs -f nginx_pod_name
 		password!) as root.
 
 _tip: use the "**-vvv**" option when starting ssh for maximum debug messages._
-
-## REVERSE PROXY TO PHPMYADMIN CONTAINER
-
-	it is a one liner:
-	```
-	location /wordpress { 
-		proxy_pass <ip>:port/;
-	}
-	```
-reasons it did not work: the _**/wordpress**_ will be appended to <ip>:port
-`<ip>:port/wordpress` and this is probably not an existing location or page
-on the proxyed server.
-
-**_TIP_** __MAKE SURE you add the trailing '/' at the end of the proxy_pass line.__
-
-## 307 REDIRECT TO WORDPRESS CONTAINER
-
-when accessing the nginx container with URI _/wordpress_ (i also implemented 
-_/wordpress/_) there is a 307 temporary redirect implemented. The browser will
-change the address in the URL.

@@ -1,10 +1,7 @@
 ### check associated README.txt for explanations and details.
 FROM alpine:latest
 
-#because more than one process will be ran, we will add openrc and manage all
-#add openrc, nginx, openssl, openssh
 RUN apk update \
-	#&& apk add openrc --no-cache \
 	&& apk add nginx &&  mkdir -p /run/nginx \
 	&& mkdir -p /var/www/my_server \
 	&& apk add openssl \
@@ -24,18 +21,16 @@ ENV __WORDPRESS_IP__=172.24.0.3
 # port... unless you use the "-p" option with the docker run command.
 EXPOSE 80 443 22
 
-### NGINX SETUP ###
-#copy server_config file and place the webpage
-#note: make it default otherwise it doesnt work for some reason.
+### NGINX SETUP ### see the setup_nginx.sh script for more details.
+COPY ./srcs/srcs_nginx/setup_nginx.sh /usr/sbin
 COPY ./srcs/srcs_nginx/server_config  /tmp/
 COPY ./srcs/srcs_nginx/index.html /var/www/my_server/index.html
 COPY ./srcs/srcs_nginx/self-signed.conf /etc/nginx/snippets/
 
 ### SSH SETUP ###
 # copy the authorized_keys in the root home.
+COPY ./srcs/srcs_ssh/setup_ssh.sh /usr/sbin
 COPY ./srcs/srcs_ssh/authorized_keys /root/.ssh/authorized_keys
-#for secret authentication on user@<ip_adress_server> to work straight away,
-# add the authorized_keys file into /home/user/.ssh folder.
 COPY ./srcs/srcs_ssh/authorized_keys /tmp 
 #custom message of the day replaced for fun
 COPY ./srcs/srcs_ssh/motd /etc/motd
