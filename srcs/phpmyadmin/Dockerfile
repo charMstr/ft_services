@@ -1,9 +1,9 @@
 FROM alpine:latest
 
-ENV __DB_NAME__ wordpress
-ENV __DB_USERNAME__ user
-ENV __DB_PASSWORD__ password
-ENV __DB_HOST__ 172.22.0.2
+ENV __DB_NAME__=wordpress
+ENV __DB_USERNAME__=user
+ENV __DB_PASSWORD__=password
+ENV __DB_HOST__=172.22.0.2
 
 RUN apk update \
 	&& apk add nginx \
@@ -18,11 +18,13 @@ RUN apk update \
 EXPOSE 5000
 
 COPY ./srcs/bootstrap.sh /usr/sbin
-COPY ./srcs/phpmyadmin_server.conf /etc/nginx/conf.d
-COPY ./srcs/phpmyadmin_config.inc.php /tmp/config.inc.php
+COPY ./srcs/srcs_nginx/setup_nginx.sh /usr/sbin/
+COPY ./srcs/srcs_nginx/phpmyadmin_server.conf /etc/nginx/conf.d
+COPY ./srcs/srcs_phpmyadmin/setup_phpmyadmin.sh /usr/sbin
+COPY ./srcs/srcs_phpmyadmin/phpmyadmin_config.inc.php /tmp/config.inc.php
 
 #override the original conf with ours:
 # now fastcgi pass happens over Unix domain socket instead of a TCP/IP socket
-COPY ./srcs/my_php-fpm7.conf /etc/php7/php-fpm.d/www.conf
+COPY ./srcs/srcs_phpmyadmin/my_php-fpm7.conf /etc/php7/php-fpm.d/www.conf
 
 CMD ["bootstrap.sh"]

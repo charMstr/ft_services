@@ -1,10 +1,10 @@
 FROM alpine:latest
 
-ENV __WORDPRESS_DB_NAME__ wordpress
-ENV __WORDPRESS_DB_USERNAME__ user
-ENV __WORDPRESS_DB_PASSWORD__ password
-ENV __WORDPRESS_DB_HOST__ 127.0.0.1
-ENV __WORDPRESS_DB_TABLE_PREFIX__ aha_archi_wp_
+ENV __WORDPRESS_DB_NAME__=wordpress
+ENV __WORDPRESS_DB_USERNAME__=user
+ENV __WORDPRESS_DB_PASSWORD__=password
+ENV __WORDPRESS_DB_HOST__=127.0.0.1
+ENV __WORDPRESS_DB_TABLE_PREFIX__=aha_archi_wp_
 
 RUN apk update \
 	&& apk add nginx \
@@ -39,10 +39,13 @@ RUN apk update \
 	# clean cache
 	&& rm -rf /var/cache/apk/*
 
-COPY /srcs/wp_salt_keys_reset.sh /usr/sbin/
-COPY /srcs/wp_install_and_edit_wp-config.sh /usr/sbin
 COPY /srcs/bootstrap.sh /usr/sbin
-COPY /srcs/wp_server.conf /etc/nginx/conf.d
+
+COPY ./srcs/srcs_wordpress/setup_wordpress.sh /usr/sbin
+COPY ./srcs/srcs_wordpress/wp_salt_keys_reset.sh /usr/sbin/
+
+COPY ./srcs/srcs_nginx/setup_nginx.sh /usr/sbin
+COPY ./srcs/srcs_nginx/wp_server.conf /etc/nginx/conf.d
 
 EXPOSE 5050
 

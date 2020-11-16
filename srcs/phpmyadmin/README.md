@@ -1,7 +1,7 @@
 # PHMYQADMIN CONTAINER
 
 This readme is dedicated to the PhpMyAdmin container, subpart of the
-ft_services project(school project, at 42).
+ft\_services project(school project, at 42).
 
 ## OVERVIEW
 
@@ -27,7 +27,10 @@ of a TCP/IP socket. Possible because we run both processes on the same machine,
 its quicker and this reduces security attack surface by itself. That was just a
 good exercice.
 
-## RUNNING PROCESSES IN THE SAME CONTAINER
+Two services in the same container but yet we mannaged to avoid using a full
+fledged init process.
+
+## RUNNING SERVICES IN THE SAME CONTAINER:
 
 - Nginx
 - php-fpm7
@@ -38,10 +41,10 @@ good exercice.
 
 ## ENV VARIABLES (and their default values):
 
-- \_\_WORDPRESS_DB_NAME\_\_ wordpress
-- \_\_WORDPRESS_DB_USERNAME\_\_ user
-- \_\_WORDPRESS_DB_PASSWORD\_\_ password
-- \_\_WORDPRESS_DB_HOST\_\_ 127.0.0.1
+- \_\_WORDPRESS\_DB\_NAME\_\_=wordpress
+- \_\_WORDPRESS\_DB\_USERNAME\_\_=user
+- \_\_WORDPRESS\_DB\_PASSWORD\_\_=password
+- \_\_WORDPRESS\_DB\_HOST\_\_=127.0.0.1
 
 ## LOGS
 
@@ -52,7 +55,9 @@ same goes for php-fpm
 ## TIPS and REASONS IT DID NOT WORK
 
 First make sure you can access the phpMyAdmin initial page asking for usename
-and   password through [http://localhost:5000], this requires installing phpmyamdin application, setting up the nginx server to redirect to its root folder throug php-fmp. (start nginx and php-fpm).
+and password through [http://localhost:5000], this requires installing
+phpmyamdin application, setting up the nginx server to redirect to its root
+folder throug php-fmp. (start nginx and php-fpm).
 
 Once you have correctly access that, try to access:
 [http://localhost:5000/setup/index.php]
@@ -63,6 +68,6 @@ Once everything worked perfectly, i tried to edit my admin user or add new
 one through phpmyadmin. It worked but i could not connect:
 _Error: The password you entered for the username admin is incorrect._
 
-when updating the user_pass value in wp_users table, make sure you use MD5,
-using no encryption method was the problem. Also make sure in the wp_usermeta
+when updating the user\_pass value in wp\_users table, make sure you use MD5,
+using no encryption method was the problem. Also make sure in the wp\_usermeta
 table to have the correct prefix: "wp\_" or your curstom on.

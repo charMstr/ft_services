@@ -28,7 +28,7 @@ Port 20 and 21 are classic ftp ports.
 Port 30 000 should be exposed so that we can have a passive connexion.
 note: The port 30000 is given as min andmax in the vsftpd.conf file.
 
-## SERVICES:
+## RUNNING SERVICES IN THE SAME CONTAINER:
 
 - vsftpd
 
@@ -44,7 +44,7 @@ It has been used as it should be the more lightweight.
 log file redirection to docker log collection (through stdout) is made with a
 tail -f. (sym link would not work).
 
-## vsftpd.conf
+## VSFTPD.CONF
 	
 tips: install filezilla and look at the error messages when configuring.
 
@@ -56,7 +56,7 @@ things that needed corrections:
 	lacal_enable=YES
 	write_enable=YES
 
-## client side
+## CLIENT SIDE
 	
 On the client side when testing the ftp connexion, you can use filezilla(easy).
 
@@ -73,5 +73,5 @@ connect to ftp server:
 	
 ** TIPS:** things that needed to be fix in /etc/lftp.conf (on local machine):
 
-	-	allow using an invalid certificate:
-		set ssl:verify-certificate no
+allow using an invalid certificate:
+	`set ssl:verify-certificate no`

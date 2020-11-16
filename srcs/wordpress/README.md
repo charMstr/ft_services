@@ -1,6 +1,6 @@
 # WORDPRESS CONTAINER
 
-This readme is dedicated to the Wordpress container, subpart of the ft_services
+This readme is dedicated to the Wordpress container, subpart of the ft\_services
 project(school project, at 42).
 
 ## OVERVIEW
@@ -8,12 +8,12 @@ project(school project, at 42).
 The container will host a wordpress site. it will also run its own nginx
 server.
 The container will have a database running in a separate container.
-The server is placed inside /var/www/aha_archi (it is actually a symlink to
+The server is placed inside /var/www/aha\_archi (it is actually a symlink to
 /usr/share/webapps/wordpress)
 
 ## IMPLEMENTATION DETAILS
 
-The user, password, and ip_host/ip_client in the wordpress container should
+The user, password, and ip\_host/ip\_client in the wordpress container should
 match the mysql database container.
 
 Wrodpress is a php application.
@@ -33,7 +33,7 @@ the old php-mysql packages needs to be replaced by php-mysqli packages.
 In the wordpress installation folder, activate the debug option within the file
 wp-config.php and life will be easier while troubleshoting.
 
-## RUNNING PROCESSES IN THE SAME CONTAINER
+## RUNNING SERVICES IN THE SAME CONTAINER:
 
 - Nginx
 - php-fpm7
@@ -47,18 +47,18 @@ the metalLB load balancer or the main "Nginx container").
 
 ## ENV variables (and their default values).
 
-- \_\_WORDPRESS_DB_NAME\_\_ wordpress
-- \_\_WORDPRESS_DB_USERNAME\_\_ user
-- \_\_WORDPRESS_DB_PASSWORD\_\_ password
-- \_\_WORDPRESS_DB_HOST\_\_ 127.0.0.1
-- \_\_WORDPRESS_DB_TABLE_PREFIX\_\_ aha_archi_wp_
+- \_\_WORDPRESS\_DB\_NAME\_\_=wordpress
+- \_\_WORDPRESS\_DB\_USERNAME\_\_=user
+- \_\_WORDPRESS\_DB\_PASSWORD\_\_=password
+- \_\_WORDPRESS\_DB\_HOST\_\_=127.0.0.1
+- \_\_WORDPRESS\_DB\_TABLE\_PREFIX\_\_=aha\_archi\_wp\_
 
 _Mainly used for dynamically updating the **wp-config.php** file when building image
 and starting the container._
 
 ## SECURITY:
 
-The table_prefix is not left to wp_ in order to avoid common sql injections.
+The table\_prefix is not left to wp\_ in order to avoid common sql injections.
 In the wp-config file, the salt keys are set, thanks to the **[link](https://api.wordpress.org/secret-key/1.1/salt/)**
 from their official website and can be changed though the use of the script:
 `wp_salt_keys_reset.sh`

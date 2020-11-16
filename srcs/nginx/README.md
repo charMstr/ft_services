@@ -25,7 +25,8 @@ The services are started in a script.
 Nginx is started in the foreground so that the command never ends (the
 container keeps running even in detached mode).
 
-## RUNNING PROCESSES:
+## RUNNING SERVICES IN THE SAME CONTAINER:
+
 - nginx
 - ssh
 
