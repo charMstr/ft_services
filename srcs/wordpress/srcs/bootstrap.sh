@@ -1,9 +1,12 @@
 #!/bin/sh
 
+setup_nginx.sh
+
 ## install wordpress and edit wp-config.php
 setup_wordpress.sh
-
-setup_nginx.sh
+# will run the wp cli as nginx user (non root) and give it a shell
+#only do the "5minutes install" if the database is not populated yet
+su -s /bin/sh -c "config_wordpress_site.sh" nginx
 
 ### starting services ###
 # start the FastCGI php module:

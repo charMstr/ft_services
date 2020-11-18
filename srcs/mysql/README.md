@@ -28,6 +28,18 @@ populated by whaterver lays in /var/lib/mysql (on the container "filesystem").
 The Next time, since the Volume is not empty, its content will obscure whatever
 lays in /var/lib/mysql (on the container "filesystem")._
 
+#### IMPORTING A DUMP
+
+if you want to import a dump into the freshly created database, just uncomment
+the "COPY ... related line" in the docker file.
+
+Another way to start with a wordpress that is already built/configured is to
+use wp-cli tool on the wordpress container side. and quicly configure
+everything at boot up.
+
+Make sure the dump has the same table prefix than the one configure in the
+wp-config.php file on the wordpress container though.
+
 #### MYSQLD
 The mysqld (server version) in order to run first needs us to run the script:
 ```

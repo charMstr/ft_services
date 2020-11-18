@@ -39,8 +39,11 @@ done
 mysql < $tmp_file
 #deleting the tmp_file
 rm $tmp_file
-#import the database dump in freshly created database
-#mysql -u $__MYSQL_ADMIN__ -p $__MYSQL_DB_NAME__ --password=$__MYQSL_ADMIN_PASSWD__ < /tmp/wordpress_dump.sql 
-mysql wordpress -u $__MYSQL_ADMIN__ --password=$__MYSQL_ADMIN_PASSWD__ < /tmp/wordpress_dump.sql
-rm /tmp/wordpress_dump.sql
+
+# import a dump version into the freshly created database if present in /tmp
+if [ -f /tmp/wordpress_dump.sql ]
+then
+	mysql $__MYSQL_DB_NAME__ -u $__MYSQL_ADMIN__ --password=$__MYSQL_ADMIN_PASSWD__ < /tmp/wordpress_dump.sql
+	rm /tmp/wordpress_dump.sql
+fi
 exit

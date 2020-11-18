@@ -32,6 +32,13 @@ the old php-mysql packages needs to be replaced by php-mysqli packages.
 
 In the wordpress installation folder, activate the debug option within the file
 wp-config.php and life will be easier while troubleshoting.
+## WORDPRESS INSTALLATION
+
+the instalation is done through a tar ball. we could have used wp-cli directly
+with the wp-cli download command.
+note: we also could have used wp-cli to create the wp-config.php.
+Then the famous "5 minutes install" is only done if the database is not
+populated yet.
 
 ## RUNNING SERVICES IN THE SAME CONTAINER:
 

@@ -12,3 +12,5 @@ docker run --rm --name wordpress_cont -d -p 5050:5050 --network=mon_reseau -e __
 docker exec -it wordpress_cont /bin/sh ;
 docker rm -f wordpress_cont 
 
+# using the wp cli to install wp
+wp core install --url=http://localhost:5050 --title="mon_site" --admin_user=user --admin_password=password --admin_email=user@42.fr

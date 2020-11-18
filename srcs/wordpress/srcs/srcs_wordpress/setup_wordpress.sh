@@ -2,17 +2,16 @@
   
 #creat the directory in which all the webapps will land (good practice).
 mkdir -p /usr/share/webapps
-chown -R nginx:www-data /usr/share/webapps/
-
 # unzip the latest version of wordpress in directory.
 tar -xzf /tmp/latest.tar.gz  -C /usr/share/webapps/
+#make all the sudirectories and files available to nginx
+chown -R nginx:www-data /usr/share/webapps/
 #clean the /tmp folder
 rm -rf /tmp/latest.tat.gz
 
 # do a sym link from /var/www/aha_archi to the place where we will untar.
 # note: aha_archi is the root for our nginx server
-ln -s /usr/share/webapps/wordpress /var/www/aha_archi
-
+ln -s /usr/share/webapps/wordpress /var/www/wordpress
 
 ################ EDITING wp-config.php
 cd /usr/share/webapps/wordpress

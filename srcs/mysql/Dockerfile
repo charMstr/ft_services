@@ -17,7 +17,9 @@ ENV __MYSQL_ADMIN_PASSWD__=password_admin
 COPY srcs/bootstrap.sh usr/sbin/bootstrap.sh
 COPY srcs/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 COPY srcs/init_my_db.sh /usr/sbin/
-COPY srcs/wordpress_dump.sql /tmp/
+
+#uncoment this line if you want to import a dump into the database
+#COPY srcs/wordpress_dump.sql /tmp/wordpress_dump.sql
 
 EXPOSE 3306
 
