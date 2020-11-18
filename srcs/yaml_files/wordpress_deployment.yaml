@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-deployment
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress_image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5050
+          name: wp-cont-port
+        env:
+        - name: __WORDPRESS_DB_HOST__
+          valueFrom:
+            configMapKeyRef:
+              name: wp-configmap
+              key: wordpress-db-host
+        - name: __WORDPRESS_DB_TABLE_PREFIX__
+          valueFrom:
+            configMapKeyRef:
+              name: wp-configmap
+              key: wordpress-db-table-prefix
+        - name: __WORDPRESS_DB_NAME__
+          valueFrom:
+            configMapKeyRef:
+              name: wp-configmap
+              key: wordpress-db-name
+        - name: __WORDPRESS_DB_USERNAME__
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-db-user
+        - name: __WORDPRESS_DB_PASSWORD__
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-db-passwd
+  #TODO
+        #volumeMounts:
+        #- name: mysql_volume
+          #mountPath: /var/lib/mysql
+      #volumes:
+      #- name: mysql_volume
+        #persistentVolumeClaim:
+          #claimName: mysql
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-service
+  labels:
+    app: wordpress
+spec:
+  selector:
+    app: wordpress
+  type: LoadBalancer
+  ports:
+  - port: 5050
+    targetPort: wp-cont-port
+    protocol: TCP
+    nodePort: 30000
+    name: wp-service-port

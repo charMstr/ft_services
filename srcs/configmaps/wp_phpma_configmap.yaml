@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wp-configmap
+data:
+  wordpress-db-name: aha_archi
+  wordpress-db-table-prefix: aha_archi_
+  wordpress-db-host: mysql-service
