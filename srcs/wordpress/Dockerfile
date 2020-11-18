@@ -4,7 +4,11 @@ ENV __WORDPRESS_DB_NAME__=wordpress
 ENV __WORDPRESS_DB_USERNAME__=user
 ENV __WORDPRESS_DB_PASSWORD__=password
 ENV __WORDPRESS_DB_HOST__=127.0.0.1
+ENV __WORDPRESS_DB_PORT__=3306
 ENV __WORDPRESS_DB_TABLE_PREFIX__=aha_archi_wp_
+#usefull for the siteurl in the wordpress database
+ENV	__WORDPRESS_SVC_IP__=localhost
+ENV __WORDPRESS_SVC_PORT__=5050
 
 RUN apk update \
 	&& apk add nginx \

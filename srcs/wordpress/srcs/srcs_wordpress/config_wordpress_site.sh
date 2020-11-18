@@ -9,12 +9,12 @@ wp core is-installed
 if [[ $? == 1 ]]
 then
 	echo "wp-cli: wordpress not installed yet at address: $__WORDPRESS_DB_HOST__ with database: $__WORDPRESS_DB_NAME__ "
-	wp core install --url=http://localhost:5050 --title="Charmstr's_site" --admin_user=user --admin_password=password --admin_email=user@42.fr --skip-email
+	wp core install --url=http://${__WORDPRESS_SVC_IP__}:${__WORDPRESS_SVC_PORT__} --title="Charmstr's_site" --admin_user=user --admin_password=password --admin_email=user@42.fr --skip-email
 	#clean the file
-	:> /tmp/postid
+	#:> /tmp/postid
 	wp term create category haha
 	wp post create /tmp/content_first_post.txt --post_author=1 --post_category="haha" --post_title="my first post" --post_excerpt="about confinment" --post_status=publish | awk '{gsub(/[.]/, ""); print $4}' > /tmp/postid
-    echo -n "created a post with id: "; cat /tmp/postid; echo ""
+    #echo -n "created a post with id: "; cat /tmp/postid; echo ""
 	# creating different users
 	wp user create user1 user1@example.com --role=editor --user_pass=user1
     wp user create user2 user2@example.com --role=author --user_pass=user2

@@ -58,7 +58,11 @@ the metalLB load balancer or the main "Nginx container").
 - \_\_WORDPRESS\_DB\_USERNAME\_\_=user
 - \_\_WORDPRESS\_DB\_PASSWORD\_\_=password
 - \_\_WORDPRESS\_DB\_HOST\_\_=127.0.0.1
+- \_\_WORDPRESS\_DB\_PORT\_\_=3306
 - \_\_WORDPRESS\_DB\_TABLE\_PREFIX\_\_=aha\_archi\_wp\_
+
+- \_\_WORDPRESS\_SVC\_IP\_\_=localhost
+- \_\_WORDPRESS\_SVC\_PORT\_\_=5050
 
 _Mainly used for dynamically updating the **wp-config.php** file when building image
 and starting the container._
