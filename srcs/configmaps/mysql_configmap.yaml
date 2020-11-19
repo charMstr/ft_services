@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mysql-configmap
-data:
-  mysql-db-name: aha_archi

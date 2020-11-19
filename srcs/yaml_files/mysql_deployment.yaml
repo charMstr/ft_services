@@ -23,9 +23,9 @@ spec:
         env:
         - name: __MYSQL_DB_NAME__
           valueFrom:
-            configMapKeyRef:
-              name: mysql-configmap
-              key: mysql-db-name
+            secretKeyRef:
+              name: mysql-secret
+              key: wordpress-db-name
         - name: __MYSQL_DB_USER__
           valueFrom:
             secretKeyRef:

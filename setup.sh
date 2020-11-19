@@ -16,6 +16,14 @@ build_images()
 #function to start minikube
 start_minikube()
 {
+	# making sure minikube is not already started
+	minikube status 2>&1 > /dev/null
+	if [ $? -eq 0 ] 
+	then
+		echo "minikube has already been started"
+		return
+	fi
+
 	#detecting Operating system.
 	CURRENT_OS=`uname -s`
 
@@ -44,7 +52,7 @@ start_minikube()
 create_secrets()
 {
 	# creat all the secrets in that folder
-	kubectl apply -f ./secrets
+	kubectl apply -f ./srcs/secrets
 }
 
 start_minikube;

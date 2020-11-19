@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "--url=http://${__WORDPRESS_SVC_IP__}:${__WORDPRESS_SVC_PORT__} " > /tmp/echo_me_ip_port
+
 setup_nginx.sh
 
 ## install wordpress and edit wp-config.php

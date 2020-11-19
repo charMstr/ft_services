@@ -28,13 +28,13 @@ spec:
               key: wordpress-db-host
         - name: __WORDPRESS_DB_TABLE_PREFIX__
           valueFrom:
-            configMapKeyRef:
-              name: wp-configmap
+            secretKeyRef:
+              name: mysql-secret
               key: wordpress-db-table-prefix
         - name: __WORDPRESS_DB_NAME__
           valueFrom:
-            configMapKeyRef:
-              name: wp-configmap
+            secretKeyRef:
+              name: mysql-secret
               key: wordpress-db-name
         - name: __WORDPRESS_DB_USERNAME__
           valueFrom:
@@ -60,7 +60,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress-service
+  name: wp-service
   labels:
     app: wordpress
 spec:
