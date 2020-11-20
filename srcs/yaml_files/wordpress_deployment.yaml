@@ -1,3 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-service
+  labels:
+    app: wordpress
+spec:
+  selector:
+    app: wordpress
+  type: LoadBalancer
+  ports:
+  - port: 5050
+    name: wp-service-port
+    targetPort: wp-cont-port
+    protocol: TCP
+    nodePort: 5050
+
+--- 
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,6 +40,13 @@ spec:
         - containerPort: 5050
           name: wp-cont-port
         env:
+        - name: __WORDPRESS_SVC_IP__
+        #TODO
+          value: wp-service.default.svc.cluster.local.
+        - name: __WORDPRESS_SVC_PORT__
+          #value: _wp-service-port._tcp.wp-service.default.svc.cluster.local.
+          #TODO
+          value: "5050"
         - name: __WORDPRESS_DB_HOST__
           valueFrom:
             configMapKeyRef:
@@ -55,21 +81,3 @@ spec:
         #persistentVolumeClaim:
           #claimName: mysql
 
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: wp-service
-  labels:
-    app: wordpress
-spec:
-  selector:
-    app: wordpress
-  type: LoadBalancer
-  ports:
-  - port: 5050
-    targetPort: wp-cont-port
-    protocol: TCP
-    nodePort: 30000
-    name: wp-service-port

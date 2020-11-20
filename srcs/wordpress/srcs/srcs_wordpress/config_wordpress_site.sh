@@ -5,8 +5,10 @@
 
 cd /usr/share/webapps/wordpress
 
+#note: the very first time, it will fail if the database has not had the time to boot.
+sleep 3
 wp core is-installed
-if [[ $? == 1 ]]
+if [[ $? != 0 ]]
 then
 	echo "wp-cli: wordpress not installed yet at address: $__WORDPRESS_DB_HOST__ with database: $__WORDPRESS_DB_NAME__ "
 	wp core install --url=http://${__WORDPRESS_SVC_IP__}:${__WORDPRESS_SVC_PORT__} --title="Charmstr's_site" --admin_user=user --admin_password=password --admin_email=user@42.fr --skip-email
