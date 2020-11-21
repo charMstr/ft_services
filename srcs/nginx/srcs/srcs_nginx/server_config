@@ -10,14 +10,10 @@ server {
 		index index.php index.html index.htm;
 	}
 	
-	#location = /wordpress {
-	#	rewrite ^ $uri/;
-	####}
-		
-	location /wordpress {
-		#
-		rewrite ^/wordpress(/.*)$ $1 break;
-		return 307 http://$__WORDPRESS_IP__:5050/;
+	#to make sure it works with or wihout the trailing '/'
+	#it shoudl also work with remaning path.
+	location ~ ^/wordpress(?:/(.*))?$ {
+		return 307 http://$__WORDPRESS_IP__:5050$1;
 	}
 
 	location = ^(/phpmyadmin)$ {
