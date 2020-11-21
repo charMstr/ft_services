@@ -5,3 +5,5 @@ metadata:
 data:
   wordpress-svc-ip: "172.17.0.2"
   phpmyadmin-svc-ip: phpma-service.default
+  phpmyadmin-svc-port: "5000"
+  wordpress-svc-port: "5050"

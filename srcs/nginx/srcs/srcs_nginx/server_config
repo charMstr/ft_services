@@ -13,16 +13,16 @@ server {
 	#to make sure it works with or wihout the trailing '/'
 	#it shoudl also work with remaning path.
 	location ~ ^/wordpress(?:/(.*))?$ {
-		return 307 http://$__WORDPRESS_IP__:5050$1;
+		return 307 http://$__WORDPRESS_IP__:$__WORDPRESS_PORT__$1;
 	}
 
 	location = ^(/phpmyadmin)$ {
-		proxy_pass http://$__PHPMYADMIN_IP__:5000/$1;
+		proxy_pass http://$__PHPMYADMIN_IP__:$__PHPMYADMIN_PORT__/$1;
 	}
 
 	location /phpmyadmin/ {
 		##reverse proxy versIP :PMAPORT
-		proxy_pass http://$__PHPMYADMIN_IP__:5000/;
+		proxy_pass http://$__PHPMYADMIN_IP__:$__PHPMYADMIN_PORT__/;
 	}
 }
 

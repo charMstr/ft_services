@@ -79,8 +79,11 @@ Port 22 is where sshd is actively listening for an incoming ssh connexion.
 - \_\_SSH\_PASSWORD\_\_=password
 - \_\_PHPMYADMIN\_IP\_\_=172.24.0.4
 - \_\_WORDPRESS\_IP\_\_=172.24.0.3
+- \_\_WORDPRESS\_PORT\_\_=5050
+- \_\_PHPMYADMIN\_PORT\_\_=5000
 
-_used to creat a new system user and set its password._
+_ssh related env var are used to creat a new system user and set its password._
+_wordpress and phpmyadmin are for the redirections nginx will do._
 
 ## LOGS
 

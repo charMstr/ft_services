@@ -15,6 +15,8 @@ ENV __SSH_USER__=user
 ENV	__SSH_PASSWORD__=password
 ENV __PHPMYADMIN_IP__=172.24.0.4
 ENV __WORDPRESS_IP__=172.24.0.3
+ENV __WORDPRESS_PORT__=5050
+ENV __PHPMYADMIN_PORT__=5000
 
 # note: this is just documentation between the guy that writes the dockerfile
 # and the guy that will launch the docker run command. it does not publish any

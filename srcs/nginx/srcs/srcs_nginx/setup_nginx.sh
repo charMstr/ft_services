@@ -10,5 +10,5 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ngi
 
 #substitute the env variables in the server config
 #note: rename it default.conf otherwise it doesnt work for some reason.
-envsubst '$__WORDPRESS_IP__ $__PHPMYADMIN_IP__'  < /tmp/server_config > /etc/nginx/conf.d/default.conf
+envsubst '$__WORDPRESS_IP__ $__PHPMYADMIN_IP__ $__WORDPRESS_PORT__ $__PHPMYADMIN_PORT__ '  < /tmp/server_config > /etc/nginx/conf.d/default.conf
 rm /tmp/server_config

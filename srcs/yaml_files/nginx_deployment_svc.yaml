@@ -74,3 +74,13 @@ spec:
             configMapKeyRef:
               name: nginx-configmap
               key: wordpress-svc-ip
+        - name: __WORDPRESS_PORT__
+          valueFrom:
+            configMapKeyRef:
+              name: nginx-configmap
+              key: wordpress-svc-port
+        - name: __PHPMYADMIN_PORT__
+          valueFrom:
+            configMapKeyRef:
+              name: nginx-configmap
+              key: phpmyadmin-svc-port
