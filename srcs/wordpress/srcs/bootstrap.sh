@@ -1,14 +1,18 @@
 #!/bin/sh
 
-echo "--url=http://${__WORDPRESS_SVC_IP__}:${__WORDPRESS_SVC_PORT__} " > /tmp/echo_me_ip_port
-
 setup_nginx.sh
 
 ## install wordpress and edit wp-config.php
 setup_wordpress.sh
 # will run the wp cli as nginx user (non root) and give it a shell
 #only do the "5minutes install" if the database is not populated yet
+#after ten attempts to connect to the databse, we abort
 su -s /bin/sh -c "config_wordpress_site.sh" nginx
+if [[ $? = 1 ]]
+then
+	echo "ERROR: impossible to reach database, abort container"
+	exit 1
+fi
 
 ### starting services ###
 # start the FastCGI php module:

@@ -17,9 +17,9 @@ server {
 	location /wordpress/ {
 		return 307 http://$__WORDPRESS_IP__:5050/;
 	}
-
+	#without the permanent keyword, it does not persist...
 	location /phpmyadmin {
-		rewrite ^ $uri/;
+		rewrite ^ $uri/ permanent;
 	}
 
 	location /phpmyadmin/ {

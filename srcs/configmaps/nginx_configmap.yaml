@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-configmap
+data:
+  #wordpress-svc-ip: wp-service
+  #phpmyadmin-svc-ip: phpma-service
+  wordpress-svc-ip: wp-service.default
+  phpmyadmin-svc-ip: phpma-service.default

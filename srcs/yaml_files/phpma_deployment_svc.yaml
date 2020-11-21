@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpma-service
+  labels:
+    app: phpma-app
+spec:
+  selector:
+    app: phpma-app
+  type: LoadBalancer
+  ports:
+  - port: 5000
+    name: phpma-service-port
+    targetPort: phpma-cont-port
+    protocol: TCP
+    nodePort: 5000
+
+--- 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpma-deployment
+  labels:
+    app: phpma-app
+spec:
+  selector:
+    matchLabels:
+      app: phpma-app
+  template:
+    metadata:
+      labels:
+        app: phpma-app
+    spec:
+      containers:
+      - name: phpmyadmin
+        image: phpmyadmin_image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+          name: phpma-cont-port
+        env:
+        - name: __DB_HOST__
+          valueFrom:
+            configMapKeyRef:
+              name: wp-phpma-configmap
+              key: wordpress-db-host
+        - name: __DB_NAME__
+          valueFrom:
+            secretKeyRef:
+              name: wp-mysql-phpma-secret
+              key: wordpress-db-name
+        - name: __DB_USERNAME__
+          valueFrom:
+            secretKeyRef:
+              name: wp-mysql-phpma-secret
+              key: mysql-db-user
+        - name: __DB_PASSWORD__
+          valueFrom:
+            secretKeyRef:
+              name: wp-mysql-phpma-secret
+              key: mysql-db-passwd
+  #TODO
+        #volumeMounts:
+        #- name: mysql_volume
+          #mountPath: /var/lib/mysql
+      #volumes:
+      #- name: mysql_volume
+        #persistentVolumeClaim:
+          #claimName: mysql
+
+

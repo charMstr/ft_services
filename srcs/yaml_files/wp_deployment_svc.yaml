@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: wp-service
   labels:
-    app: wordpress
+    app: wordpress-app
 spec:
   selector:
-    app: wordpress
+    app: wordpress-app
   type: LoadBalancer
   ports:
   - port: 5050
@@ -22,15 +22,15 @@ kind: Deployment
 metadata:
   name: wp-deployment
   labels:
-    app: wordpress
+    app: wordpress-app
 spec:
   selector:
     matchLabels:
-      app: wordpress
+      app: wordpress-app
   template:
     metadata:
       labels:
-        app: wordpress
+        app: wordpress-app
     spec:
       containers:
       - name: wordpress
@@ -42,7 +42,9 @@ spec:
         env:
         - name: __WORDPRESS_SVC_IP__
         #TODO
-          value: wp-service.default.svc.cluster.local.
+          #value: wp-service.default.svc.cluster.local
+          #value: "172.17.0.2" OK!
+          value: "172.17.123.2"
         - name: __WORDPRESS_SVC_PORT__
           #value: _wp-service-port._tcp.wp-service.default.svc.cluster.local.
           #TODO
@@ -50,27 +52,27 @@ spec:
         - name: __WORDPRESS_DB_HOST__
           valueFrom:
             configMapKeyRef:
-              name: wp-configmap
+              name: wp-phpma-configmap
               key: wordpress-db-host
         - name: __WORDPRESS_DB_TABLE_PREFIX__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: wordpress-db-table-prefix
         - name: __WORDPRESS_DB_NAME__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: wordpress-db-name
         - name: __WORDPRESS_DB_USERNAME__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: mysql-db-user
         - name: __WORDPRESS_DB_PASSWORD__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: mysql-db-passwd
   #TODO
         #volumeMounts:

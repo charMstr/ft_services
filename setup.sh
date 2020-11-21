@@ -25,7 +25,7 @@ build_alpine_docker_images()
 start_minikube()
 {
 	# making sure minikube is not already started
-	minikube status 2>&1 > /dev/null
+	minikube status > /dev/null 2>&1 
 	if [ $? -eq 0 ] 
 	then
 		echo "\033[32m minikube has already been started \033[0m"
@@ -41,7 +41,7 @@ start_minikube()
 	echo "\033[32m starting Minikube on $CURRENT_OS \033[0m"
 	if [ $CURRENT_OS = "Linux" ]
 	then
-		minikube start --vm-driver=docker --disk-size=10g --cpus=2  $PORT_RANGE
+		minikube start --vm-driver=docker --cpus=2  $PORT_RANGE
 	elif [ $CURRENT_OS = "Darwin" ]; then
 		minikube start --vm-driver=virtualbox --disk-size=3g --cpus=3 --memory=2448 $PORT_RANGE
 	else
@@ -61,15 +61,15 @@ start_minikube()
 setup_metallb()
 {
 	echo "\n\033[32m setting up metallb\033[m"
-	minikube addons enable metallb
-	#kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml 2>&1 > /dev/null
-	#kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml 2>&1 > /dev/null
+	#minikube addons enable metallb
+	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml 2>&1 > /dev/null
+	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml 2>&1 > /dev/null
 	# On first install only 
-	#kubectl get secret -n metallb-system memberlist 2>&1 > /dev/null
-	#if [ $? != 0 ]
-	#then
-		#kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 2>&1 > /dev/null
-	#fi
+	kubectl get secret -n metallb-system memberlist  > /dev/null 2>&1
+	if [ $? != 0 ]
+	then
+		kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 2>&1 > /dev/null
+	fi
 	kubectl apply -f ./srcs/configmaps/metallb_configmap.yaml
 	# > /dev/null
 }

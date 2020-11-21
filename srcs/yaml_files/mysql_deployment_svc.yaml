@@ -3,15 +3,15 @@ kind: Deployment
 metadata:
   name: mysql-deployment
   labels:
-    app: mysql
+    app: mysql-app
 spec:
   selector:
     matchLabels:
-      app: mysql
+      app: mysql-app
   template:
     metadata:
       labels:
-        app: mysql
+        app: mysql-app
     spec:
       containers:
       - name: mysql
@@ -24,27 +24,27 @@ spec:
         - name: __MYSQL_DB_NAME__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: wordpress-db-name
         - name: __MYSQL_DB_USER__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: mysql-db-user
         - name: __MYSQL_DB_PASSWD__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: mysql-db-passwd
         - name: __MYSQL_ADMIN__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: mysql-admin
         - name: __MYSQL_ADMIN_PASSWD__
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: wp-mysql-phpma-secret
               key: mysql-admin-passwd
   #TODO
         #volumeMounts:
@@ -57,15 +57,16 @@ spec:
 
 ---
 
+#No need to create an external cluster ip for a backend service.
 apiVersion: v1
 kind: Service
 metadata:
   name: mysql-service
   labels:
-    app: mysql
+    app: mysql-app
 spec:
   selector:
-    app: mysql
+    app: mysql-app
   ports:
   - port: 3306
     targetPort: mysql-cont-port
