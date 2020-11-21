@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: nginx-configmap
 data:
-  wordpress-svc-ip: "172.17.0.2"
+  wordpress-svc-ip: "${CLUSTER_EXTERNAL_IP}"
   phpmyadmin-svc-ip: phpma-service.default

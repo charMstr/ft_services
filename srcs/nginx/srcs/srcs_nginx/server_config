@@ -10,16 +10,18 @@ server {
 		index index.php index.html index.htm;
 	}
 	
-	location /wordpress {
-		rewrite ^ $uri/;
-	}
+	#location = /wordpress {
+	#	rewrite ^ $uri/;
+	####}
 		
-	location /wordpress/ {
+	location /wordpress {
+		#
+		rewrite ^/wordpress(/.*)$ $1 break;
 		return 307 http://$__WORDPRESS_IP__:5050/;
 	}
-	#without the permanent keyword, it does not persist...
-	location /phpmyadmin {
-		rewrite ^ $uri/ permanent;
+
+	location = ^(/phpmyadmin)$ {
+		proxy_pass http://$__PHPMYADMIN_IP__:5000/$1;
 	}
 
 	location /phpmyadmin/ {

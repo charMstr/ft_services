@@ -1,3 +1,0 @@
-docker build -t test . ;
-
-docker run --rm --name test_cont -d --network=mon_reseau test

@@ -9,7 +9,7 @@ build_alpine_docker_images()
 	do	
 		DIR=`basename $DIR`
 		case $DIR in
-			secrets|yaml_files|configmaps) continue;;
+			secrets|yaml_files|configmaps|templates_for_cluster_ip) continue;;
 		esac
 		docker build -t ${DIR}_image srcs/$DIR  2>&1 > /dev/null
 		if [ $? != 0 ]
@@ -56,12 +56,14 @@ start_minikube()
 	#enable the dashboard
 	minikube addons enable dashboard
 	#MAKE THE DOCKERD AVAILABLE FROM WITHIN THE MINIKUBE
+	eval $(minikube docker-env)
 }
 
+#function to set up metallb (no update of minikube, therefore we dont use the
+#minikube addons enable metallb
 setup_metallb()
 {
 	echo "\n\033[32m setting up metallb\033[m"
-	#minikube addons enable metallb
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml 2>&1 > /dev/null
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml 2>&1 > /dev/null
 	# On first install only 
@@ -71,7 +73,6 @@ setup_metallb()
 		kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 2>&1 > /dev/null
 	fi
 	kubectl apply -f ./srcs/configmaps/metallb_configmap.yaml
-	# > /dev/null
 }
 
 create_secrets()
@@ -80,12 +81,31 @@ create_secrets()
 	kubectl apply -f ./srcs/secrets
 }
 
+#this will look at the docker0 bridge and give us the next available address
+#this way we can be sure to utilize --vm-driver=docker and be in the correct
+#subnet range
+get_external_ip()
+{
+	LAST_OCTET=`docker network inspect bridge --format='{{(index .IPAM.Config 0).Gateway}}' | cut -d . -f 4`
+
+	NETWORK_PART=`docker network inspect bridge --format='{{(index .IPAM.Config 0).Gateway}}' | cut -d . -f 1-2`
+	CLUSTER_EXTERNAL_IP=${NETWORK_PART}.0.$((LAST_OCTET+1))
+}
+
+inject_selected_external_ip()
+{
+	export CLUSTER_EXTERNAL_IP=$CLUSTER_EXTERNAL_IP
+	envsubst '$CLUSTER_EXTERNAL_IP' < srcs/templates_for_cluster_ip/nginx_configmap.yaml > ./srcs/configmaps/nginx_configmap.yaml
+}
+
+get_external_ip;
+inject_selected_external_ip;
 start_minikube;
-eval $(minikube docker-env)
 setup_metallb;
 build_alpine_docker_images;
-#create_secrets;
+create_secrets;
 
+echo "\033[32m BUILD SUCCESSFUL\033[0m"
+echo "your cluster IP is: \033[38;5;187m$CLUSTER_EXTERNAL_IP \033m"
 
 cd ${WORK_DIR}
-
