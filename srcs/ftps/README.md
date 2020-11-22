@@ -59,6 +59,11 @@ things that needed corrections:
 -	allow local users to connect and change things:
 	lacal_enable=YES
 	write_enable=YES
+-	Everyting was working fine when running the container just in docker. But
+	when i deployed in kubernetes i started to get errors like:
+	**500 OOPS: vsf_sysutil_bind**
+	**500 OOPS: priv_sock_get_int**
+	I had to set: **pasv_address=<CLUSTER_IP>** to fix it.
 
 ## CLIENT SIDE
 	
