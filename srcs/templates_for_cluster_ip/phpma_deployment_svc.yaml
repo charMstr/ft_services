@@ -2,12 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: phpma-service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "sharing key"
   labels:
     app: phpma-app
 spec:
   selector:
     app: phpma-app
   type: LoadBalancer
+  loadBalancerIP: ${CLUSTER_EXTERNAL_IP}
   ports:
   - port: 5000
     name: phpma-service-port

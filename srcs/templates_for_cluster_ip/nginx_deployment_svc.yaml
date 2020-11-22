@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "sharing key"
+  labels:
+    app: nginx-app
+spec:
+  selector:
+    app: nginx-app
+  type: LoadBalancer
+  loadBalancerIP: ${CLUSTER_EXTERNAL_IP}
+  ports:
+  - port: 22
+    name: ssh-svc-port
+    targetPort: ssh-cont-port
+    protocol: TCP
+    nodePort: 22
+  - port: 80
+    name: http-svc-port
+    targetPort: http-cont-port
+    protocol: TCP
+    nodePort: 80
+  - port: 443
+    name: https-svc-port
+    targetPort: https-cont-port
+    protocol: TCP
+    nodePort: 443
+
+--- 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx-app
+spec:
+  selector:
+    matchLabels:
+      app: nginx-app
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      containers:
+      - name: nginx
+        image: nginx_image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 22
+          name: ssh-cont-port
+        - containerPort: 80
+          name: http-cont-port
+        - containerPort: 443
+          name: https-cont-port
+        env:
+        - name: __SSH_USER__
+          valueFrom:
+            secretKeyRef:
+              name: nginx-secret
+              key: nginx-ssh-user
+        - name: __SSH_PASSWORD__
+          valueFrom:
+            secretKeyRef:
+              name: nginx-secret
+              key: nginx-ssh-password
+        - name: __PHPMYADMIN_IP__
+          valueFrom:
+            configMapKeyRef:
+              name: nginx-configmap
+              key: phpmyadmin-svc-ip
+        - name: __WORDPRESS_IP__
+          valueFrom:
+            configMapKeyRef:
+              name: nginx-configmap
+              key: wordpress-svc-ip
+        - name: __WORDPRESS_PORT__
+          valueFrom:
+            configMapKeyRef:
+              name: nginx-configmap
+              key: wordpress-svc-port
+        - name: __PHPMYADMIN_PORT__
+          valueFrom:
+            configMapKeyRef:
+              name: nginx-configmap
+              key: phpmyadmin-svc-port

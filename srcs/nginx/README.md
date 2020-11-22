@@ -45,7 +45,7 @@ demo purpose.
 
 ##### REVERSE PROXY TO PHPMYADMIN CONTAINER
 
-	it is a one liner:
+	it is a one liner: using proxy pass
 	```
 	location /wordpress { 
 		proxy\_pass <ip>:port/;
@@ -57,6 +57,10 @@ on the proxyed server.
 
 **_TIP_** _MAKE SURE you add the trailing '/' at the end of the proxy\_pass line._
 **_TIP_** **RTFM!**
+**_TIP_** in your web browser use the development tool to track the netwok
+exchanges when making a request.
+**_TIP_** clearing your cache in web browser might be necessary for some
+changes to actually occur.
 
 ##### 307 REDIRECT TO WORDPRESS CONTAINER
 

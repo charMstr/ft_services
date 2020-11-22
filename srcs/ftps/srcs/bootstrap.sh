@@ -3,6 +3,8 @@
 # creat a ssl key pair for our ftps server.
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=NL/ST=Noord-Holland/O=Codam/CN=Peer de Bakker' -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt &>/dev/null
 
+envsubst '$__CLUSTER_EXTERNAL_IP__' < /tmp/vsftpd.conf > /etc/vsftpd/vsftpd.conf
+
 #add a user named "user", its password is "password"
 adduser -D $__FTP_USER__ && echo "$__FTP_USER__:$__FTP_PASSWORD__" | chpasswd &>/dev/null
 

@@ -32,13 +32,31 @@ the old php-mysql packages needs to be replaced by php-mysqli packages.
 
 In the wordpress installation folder, activate the debug option within the file
 wp-config.php and life will be easier while troubleshoting.
+
 ## WORDPRESS INSTALLATION
 
 the instalation is done through a tar ball. we could have used wp-cli directly
 with the wp-cli download command.
-note: we also could have used wp-cli to create the wp-config.php.
+
+_note: we also could have used wp-cli to create the wp-config.php!_
+
 Then the famous "5 minutes install" is only done if the database is not
 populated yet.
+
+## FAMOUS 5 MINUTES INSTALL
+
+the 5 minutes install is done when this container is booting up. Achieving this
+could have been done in two ways:
+- either precreate a database and import a sql dump in the mysql container
+(very rigid because we cannot change the site name etc).
+- use the wp-cli tool from within the wordpress container at startup, much
+cleaner solution. dynamically configurable when starting the cluster.
+
+The second option was selected. Keeping in mind the cluster will be deployed
+all at once, and that the mysql database container could take some time to boot
+up, a script will be made and attempt ten times to connect to the database
+before running the automatic 5 minutes install trough the wp-cli tool.
+if those 10 attempts  fail. the container crashes on purpose.
 
 ## RUNNING SERVICES IN THE SAME CONTAINER:
 

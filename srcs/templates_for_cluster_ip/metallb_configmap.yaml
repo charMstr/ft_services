@@ -9,5 +9,6 @@ data:
     - name: default
       protocol: layer2
       addresses:
+      # the range notation is dropped for a single ip notation.
       #- 172.17.0.2-172.17.0.255
-      - 172.17.123.2-172.17.230.255
+      - ${CLUSTER_EXTERNAL_IP}/32

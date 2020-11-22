@@ -1,15 +1,19 @@
-# ft_services
+# FT_SERVICES
 
 This is a school project for the **_42cursus_**.
 
-note: Each subparts of this project has its own readme.md
+_note: Each subparts of this project has its own readme.md_
 
-## Preview of project
+## OVERVIEW OF PROJECT
 
-The projects is about deploying automatically a cluster of microservices using homemade container images, and an orchestration tool.
-The orchestration tool for managing the containers and their interconnections is kubernetes, it creates and maintains the cluster state for us.
-Each container image is build from scratch from the alpine linux base image for lightweight and learning purpose.
-The whole service we are going to run is made of the following microservices (each in its container).
+The projects is about deploying automatically a cluster of microservices using
+homemade container images and an orchestration tool.
+The orchestration tool for managing the containers and their interconnections
+is kubernetes, it creates and maintains the cluster state for us.
+Each container image is build from scratch from the alpine linux base image for
+lightweight and learning purpose.
+The whole service we are going to run is made of the following microservices
+(each in its dedicated container).
 - Nginx server
 - FTPs server
 - Wordpress
@@ -18,50 +22,140 @@ The whole service we are going to run is made of the following microservices (ea
 - Grafana (visualisation for monitoring the containers)
 - INfluxDB database (database for the grafana)
 
-From the outside world, the access to the cluster is made through a load balancer. MetalLB is used for this purpose.
+From the outside world, the access to the cluster is made through a load
+balancer. MetalLB is used for this purpose. It will publish only one IP to
+access the whole cluster.
 
-## How to use
+## USAGE
 
-In order to run this project you will need to have installed minikube and its dependencies locally (including kubelet).
-then in the root folder you should be able to execute the script **setup.sh**.
-**setup.sh** will start minikube and will then build our own docker images.
-Then it will creat and interconnect all the kubernetes necessary objects, and then maintain the cluster.
+### PREREQUISITES:
+-docker installed and running.
+-minikube installed, and its dependencies. Especially kubelet.
+-be on Linux
 
-## credentials
+### SETUP.SH
+In the root folder you should be able to execute the script **setup.sh**.
+```
+./setup.sh
+```
+**setup.sh** will start minikube according to the OS, it will then build our
+own custom docker images.
+Then it will creat all the kubernetes necessary objects. The interconnection
+between those object is set within the configuration files (yaml format).
+
+### CREDENTIALS
 
 for the entire project, the credentials are:
 
 - user="_user_"
 - password="_password_"
 
-Those are defined as environement variables in each dockerfile, though they can be overidden through the use of new environment variables at runtime.
+_note:Those are defined as environement variables in each dockerfile with a
+default value.
+At runtime they are overidden through the use of new environment variables
+passed in our yaml configuration files. The redefinitions of those variables
+are found either in the configmaps(non sensitive) and secrets(sensitive)._
 
-## understanding project parts:
+**_important note:_** secrets.yaml file should be stored independently.
 
-### 1. "Nginx" container:
-it is a container running an Nginx server as well as an ssh server.
+## MINIKUBE AND METALLB:
 
-**Nginx server** is listening on the ports:
+### MINIKUBE:
+It is a tool allowing us to deploy a very basic version of a cluster, but
+locally on our machine, for development purpose. The cluster is made of only
+one node which includes the master process as well. Normally a real kubernetes
+cluster would require at least one master node, and a worker node (on which our
+kubernetes objects for our app are deployed).
 
-- 80, doing an automatic redirect on port 443.
-- 443, providing a secure ssl conexion.
+#### DRIVER USED
+This project was developped on a ubuntu VM on which docker was installed and 
+running. Therefor the possibility to use directly the docker engine instead of
+a Virtual Machine to deploy our minikube cluster was used.
+```
+minikube start --vm-driver=docker
+```
 
-its logs are made accessible to docker.
+#### VERSION USED:
+minikube version: v1.9.0
+_note: this previous version does not come withe the metallb addon_.
 
-**Openssh-server** is listening on the port:
+### METALLB:
 
-- 22 (secure shell).
+Metallb allows us to provide an external Ip address to our kubernetes services
+objects of type **LoadBalancer** on bare metal server. So no need to go through
+a cloud provider.
+Metallb will need to provide ip addresses in our case that are in the same 
+subnet as the docker0 bridge (the bridge the docker engine creates).
+This because we start our cluster within the docker engine.
 
-For the sake of learning, and knowing how to implement good practices, I chose not to just set _no password_, nor use a password.
-Instead i chose to force the connexion using an assymetric key pair authentication method (much stronger security).
-When the image is built, new host keys are generated on the server side, and 
-the .ssh/authorized_keys file will already contain one specific public key.
-As reminded in the ssh banner, the client for demo purpose will have to addopt that specific public key and its matching private key.
-The key pair can be found into ft_services/srcs/**Nginx**/srcs_ssh/client_key_pair/ folder.
-Once addopted on the client side (copy/past in its ~/.ssh folder), the ssh connexion should process through authentication automatically.
+## MORE ABOUT KUBERNETES OBJECTS(K8S):
 
-### 2. "FTPS" container:
+Oour cluster will be composed of different kubernetes objects:
+- deployments theiy are a superset of pods, so that we dont have to handel them
+individually.
+- pods, they are basically running a container (abstraction over containers).
+- services (either reachable from the exterior (type: _LoadBalancer_) or not
+(type: _ClusterIp_) they will allow us to make our pods communicate with each
+others within the cluster for example.
+- volumes, making it possible to maintain data persistence when containers
+craah and are being restarted.
 
-We will use the ***vsftpd*** ftp server because it is the most lightweight(important for containerised apps) and trusted.
+## UNDERSTANDING PROJECT PARTS:
+
+### 1. "NGINX" CONTAINER:
+
+It is a container running an Nginx server(port 443 or port 80 redirecting 443),
+as well as an ssh server(port 443)
+It will also:
+- act as a reverse proxy server to the container phpmyadmin with
+the _/phpmyadmin_ in the URI,
+- give a temporary redirect of type 307 to the container running wordpress.
+
+More details on the dedicated README.md of this microservice:
+_see srcs/nginx/README.md_.
+
+### 2. "FTPS" CONTAINER:
+
+We will use the ***vsftpd*** ftp server because it is the most lightweight
+(important for containerised apps) and trusted.
 The logs are made accessible to docker.
-The anonymous connexions have been disabled, the ssl/tls connexion is used, and the connexion is chrooted for learning purpose.
+The anonymous connexions have been disabled, the ssl/tls connexion is used, and
+the connexion is chrooted for learning purpose.
+
+More details on the dedicated README.md of this microservice:
+_see srcs/ftps/README.md_.
+
+### 3. "WORDPRESS" CONTAINER:
+
+Tthis container will listen on port 5050. it can also be reached through the
+nginx container that makes a temporary 307 redirect to it.
+
+The wordpress is already set up with a couple of users etc (the famous 5
+minutes install is done).
+Two methods were possible:
+- either precreate a database and import a dump in the mysql container
+(very rigid because we cannot change the site name etc).
+- use the wp-cli tool from within the wordpress container at startup, much
+cleaner solution. dynamically configurable when starting the cluster.
+
+Since the folder _wp-content_ stores the media(not uploaded into the database),
+a persistent volume should be mounted there.
+
+More details on the dedicated README.md of this microservice:
+_see srcs/wordpress/README.md_.
+
+### 4. "PHPMYADMIN" CONTAINER:
+
+It connects to the mysql database container. It can be accessed on port 5000,
+or through the nginx contaier (ports 80 et 443) with the uri _/phpmyadmin_
+
+More details on the dedicated README.md of this microservice:
+_see srcs/phpmyadmin/README.md_.
+
+### 5. "MYSQL" CONTAINER:
+
+This is a statefulset application, therefore it require to mount a persistent
+volume otherwise the data will be lost between different containers lifecycle.
+
+More details on the dedicated README.md of this microservice:
+_see srcs/mysql/README.md_.

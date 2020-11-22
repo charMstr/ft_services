@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "sharing key"
+  labels:
+    app: wordpress-app
+spec:
+  selector:
+    app: wordpress-app
+  type: LoadBalancer
+  loadBalancerIP: 172.17.0.2
+  ports:
+  - port: 5050
+    name: wp-service-port
+    targetPort: wp-cont-port
+    protocol: TCP
+    nodePort: 5050
+
+--- 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-deployment
+  labels:
+    app: wordpress-app
+spec:
+  selector:
+    matchLabels:
+      app: wordpress-app
+  template:
+    metadata:
+      labels:
+        app: wordpress-app
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress_image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5050
+          name: wp-cont-port
+        env:
+        - name: __WORDPRESS_SVC_IP__
+          #obviously not working for external ip
+          #value: wp-service.default.svc.cluster.local
+          value: 172.17.0.2
+        - name: __WORDPRESS_SVC_PORT__
+          #value: _wp-service-port._tcp.wp-service.default.svc.cluster.local.
+          value: "5050"
+        - name: __WORDPRESS_DB_HOST__
+          valueFrom:
+            configMapKeyRef:
+              name: wp-phpma-configmap
+              key: wordpress-db-host
+        - name: __WORDPRESS_DB_TABLE_PREFIX__
+          valueFrom:
+            secretKeyRef:
+              name: wp-mysql-phpma-secret
+              key: wordpress-db-table-prefix
+        - name: __WORDPRESS_DB_NAME__
+          valueFrom:
+            secretKeyRef:
+              name: wp-mysql-phpma-secret
+              key: wordpress-db-name
+        - name: __WORDPRESS_DB_USERNAME__
+          valueFrom:
+            secretKeyRef:
+              name: wp-mysql-phpma-secret
+              key: mysql-db-user
+        - name: __WORDPRESS_DB_PASSWORD__
+          valueFrom:
+            secretKeyRef:
+              name: wp-mysql-phpma-secret
+              key: mysql-db-passwd
+  #TODO
+        #volumeMounts:
+        #- name: mysql_volume
+          #mountPath: /var/lib/mysql
+      #volumes:
+      #- name: mysql_volume
+        #persistentVolumeClaim:
+          #claimName: mysql
+

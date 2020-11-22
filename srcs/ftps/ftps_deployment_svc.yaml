@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps-service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "sharing key"
+  labels:
+    app: ftps-app
+spec:
+  selector:
+    app: ftps-app
+  type: LoadBalancer
+  loadBalancerIP: 172.17.0.2
+  ports:
+  - port: 20
+    name: ftps-svc-port1
+    targetPort: ftps-cont-port1
+    protocol: TCP
+    nodePort: 20
+  - port: 21
+    name: ftps-svc-port2
+    targetPort: ftps-cont-port2
+    protocol: TCP
+    nodePort: 21
+  - port: 30000
+    name: ftps-svc-port3
+    targetPort: ftps-cont-port3
+    protocol: TCP
+    nodePort: 30000
+
+--- 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftps-deployment
+  labels:
+    app: ftps-app
+spec:
+  selector:
+    matchLabels:
+      app: ftps-app
+  template:
+    metadata:
+      labels:
+        app: ftps-app
+    spec:
+      containers:
+      - name: ftps
+        image: ftps_image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 20
+          name: ftps-cont-port1
+        - containerPort: 21
+          name: ftps-cont-port2
+        - containerPort: 30000
+          name: ftps-cont-port3
+        env:
+        - name: __FTP_USER__
+          valueFrom:
+            secretKeyRef:
+              name: ftps-secret
+              key: ftps-user
+        - name: __FTP_PASSWORD__
+          valueFrom:
+            secretKeyRef:
+              name: ftps-secret
+              key: ftps-password
+        - name: __CLUSTER_EXTERNAL_IP__
+          value: 172.17.0.2

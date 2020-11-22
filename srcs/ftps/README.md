@@ -36,8 +36,12 @@ It has been used as it should be the more lightweight.
 
 ## ENV VARIABLES (and their default values):
 
-- \_\_FTP_USER\_\_=user
-- \_\_FTP_PASSWORD\_\_=password
+- \_\_FTP\_USER\_\_=user
+- \_\_FTP\_PASSWORD\_\_=password
+- \_\_CLUSTER\_EXTERNAL\_IP\_\_=172.17.0.2
+
+_note: the last one is there so we can set pasv_address in the vsftpd.conf to
+our clusterIP._
 
 ## LOGS
 

@@ -2,12 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx-service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "sharing key"
   labels:
     app: nginx-app
 spec:
   selector:
     app: nginx-app
   type: LoadBalancer
+  loadBalancerIP: 172.17.0.2
   ports:
   - port: 22
     name: ssh-svc-port
