@@ -4,6 +4,9 @@
 mkdir -p /usr/share/webapps
 # unzip the latest version of wordpress in directory.
 tar -xzf /tmp/latest.tar.gz  -C /usr/share/webapps/
+#make sure we can upload images to the wp-content directory.
+mkdir -m 777 /usr/share/webapps/wordpress/wp-content/uploads
+
 #make all the sudirectories and files available to nginx
 chown -R nginx:www-data /usr/share/webapps/
 #clean the /tmp folder

@@ -69,3 +69,25 @@ spec:
               key: ftps-password
         - name: __CLUSTER_EXTERNAL_IP__
           value: ${CLUSTER_EXTERNAL_IP}
+        volumeMounts:
+        - name: ftps-volume
+          mountPath: /home/
+      volumes:
+      - name: ftps-volume
+        persistentVolumeClaim:
+          claimName: ftps-pv-claim
+---
+
+#the storage class is provided by default by minikube.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ftps-pv-claim
+  labels:
+    app: ftps-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Mi

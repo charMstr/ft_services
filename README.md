@@ -75,6 +75,14 @@ a Virtual Machine to deploy our minikube cluster was used.
 minikube start --vm-driver=docker
 ```
 
+instead of running a command like `ssh minikubeip`, you would have to do
+```
+docker ps
+docker exec -it <k8s-minikube_container_name> /bin/sh
+```
+to be able to be where the cluster is deployed. doing so i could or example see
+where my persistent volumes where mounted.
+
 #### VERSION USED:
 minikube version: v1.9.0
 _note: this previous version does not come withe the metallb addon_.
@@ -99,6 +107,25 @@ individually.
 others within the cluster for example.
 - volumes, making it possible to maintain data persistence when containers
 craah and are being restarted.
+
+#### PERSISTENT VOLUMES WITH MINIKUBE
+
+A persistent volume is a kubernetes object which act as if it was a kard drive
+plugged in. To access those volumes within our deployments, in the yaml file we
+mount the volume on the **pod** itself (with a _persistent volume claim_:
+another kubernetes object) and on the **container**.
+
+when the pod does a _persistant volume claim_, a matching _persistant volume_
+that should have already been created will be used.
+
+To avoid creating manually those _persistent volume_ objects, kubernetes offers
+a way to dinamically creat them on demand: _Storage Classe_ objects do this
+for us.
+
+Minikube has a builtin _storageclass_ that will creat _persistent volumes_ on
+demand dynamically on the host. those are at the _host\_path_ location
+
+documentation: [https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/]
 
 ## UNDERSTANDING PROJECT PARTS:
 

@@ -75,12 +75,33 @@ spec:
             secretKeyRef:
               name: wp-mysql-phpma-secret
               key: mysql-db-passwd
-  #TODO
-        #volumeMounts:
-        #- name: mysql_volume
-          #mountPath: /var/lib/mysql
+        volumeMounts:
+        - name: wp-volume
+          mountPath: /usr/share/webapps/wordpress/wp-content/
+      #trying another style. directly mount on the hostpath
+      #it is mounted into the main container that runs our k8s cluster.
+      #see that with: $docker exec <k8s-minikube_container_name> ls /tmp
+      volumes:
+      - name: wp-volume
+        hostPath:
+          path: /tmp/wp_vol
       #volumes:
-      #- name: mysql_volume
+      #- name: wp-volume
         #persistentVolumeClaim:
-          #claimName: mysql
+          #claimName: wp-pv-claim
+#---
+
+#the storage class is provided by default by minikube.
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: wp-pv-claim
+#  labels:
+#    app: wp-app
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 1Gi
 

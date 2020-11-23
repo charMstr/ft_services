@@ -46,14 +46,29 @@ spec:
             secretKeyRef:
               name: wp-mysql-phpma-secret
               key: mysql-admin-passwd
-  #TODO
-        #volumeMounts:
-        #- name: mysql_volume
-          #mountPath: /var/lib/mysql
-      #volumes:
-      #- name: mysql_volume
-        #persistentVolumeClaim:
-          #claimName: mysql
+        volumeMounts:
+        - name: mysql-volume
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-volume
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+
+---
+
+#the storage class is provided by default by minikube.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: mysql-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
 
 ---
 
