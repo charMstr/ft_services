@@ -9,7 +9,8 @@ fi
 chown -R nginx:www-data /run/php-fpm7/
 
 #creat folder where we will put our webapp phpmyadmin
-mkdir -p /usr/share/webapps/phpmyadmin
+#creat at the same time the tmp folder to avoid a futur warning
+mkdir -p /usr/share/webapps/phpmyadmin/tmp
 
 #unzip at the correct location and give
 # strip-component option so that we unzip inside the existing folder
