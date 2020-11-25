@@ -230,7 +230,8 @@ create_secrets;
 create_kubernetes_configmaps;
 create_kubernetes_deployments_services;
 
-#display_for_correction;
-#echo -n "Press 'ENTER' for \033[38;5;255mMinikube Dashboard: \033[m"
-#read REPLY 
-#minikube dashboard
+#display a success message if we got here. and display the links for correction
+display_for_correction;
+echo -n "Press 'ENTER' for \033[38;5;255mMinikube Dashboard: \033[m"
+read REPLY 
+minikube dashboard
