@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: influxdb-deployment
+  name: influxdb
   labels:
-    app: influxdb-app
+    app: influxdb-deployment
 spec:
   selector:
     matchLabels:
-      app: influxdb-app
+      app: influxdb-pod
   template:
     metadata:
       labels:
-        app: influxdb-app
+        app: influxdb-pod
     spec:
       containers:
       - name: influxdb
@@ -36,7 +36,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: influxdb-pv-claim
   labels:
-    app: influxdb-app
+    app: influxdb-pvc
 spec:
   #storageClassName: manual
   accessModes:
@@ -53,10 +53,10 @@ kind: Service
 metadata:
   name: influxdb-service
   labels:
-    app: influxdb-app
+    app: influxdb-service
 spec:
   selector:
-    app: influxdb-app
+    app: influxdb-pod
   ports:
   - port: 8086
     targetPort: influ-cont-port

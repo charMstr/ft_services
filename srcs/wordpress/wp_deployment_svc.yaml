@@ -5,10 +5,10 @@ metadata:
   annotations:
     metallb.universe.tf/allow-shared-ip: "sharing key"
   labels:
-    app: wordpress-app
+    app: wp-service
 spec:
   selector:
-    app: wordpress-app
+    app: wp-pod
   type: LoadBalancer
   loadBalancerIP: 172.17.0.2
   ports:
@@ -23,17 +23,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wp-deployment
+  name: wordpress
   labels:
-    app: wordpress-app
+    app: wp-deployment
 spec:
   selector:
     matchLabels:
-      app: wordpress-app
+      app: wp-pod
   template:
     metadata:
       labels:
-        app: wordpress-app
+        app: wp-pod
     spec:
       containers:
       - name: wordpress
@@ -97,7 +97,7 @@ spec:
 #metadata:
 #  name: wp-pv-claim
 #  labels:
-#    app: wp-app
+#    app: wp-pvc
 #spec:
 #  accessModes:
 #    - ReadWriteOnce

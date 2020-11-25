@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: telegraf-app
+  name: telegraf
   labels:
-    app: telegraf-app
+    app: telegraf-deployment
 spec:
   selector:
     matchLabels:
-      app: telegraf-app
+      app: telegraf-pod
   template:
     metadata:
       labels:
-        app: telegraf-app
+        app: telegraf-pod
     spec:
       #tying the pod to an account name
       serviceAccountName: telegraf-account

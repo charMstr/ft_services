@@ -5,10 +5,10 @@ metadata:
   annotations:
     metallb.universe.tf/allow-shared-ip: "sharing key"
   labels:
-    app: ftps-app
+    app: ftps-service
 spec:
   selector:
-    app: ftps-app
+    app: ftps-pod
   type: LoadBalancer
   loadBalancerIP: ${CLUSTER_EXTERNAL_IP}
   ports:
@@ -33,17 +33,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ftps-deployment
+  name: ftps
   labels:
-    app: ftps-app
+    app: ftps-deployment
 spec:
   selector:
     matchLabels:
-      app: ftps-app
+      app: ftps-pod
   template:
     metadata:
       labels:
-        app: ftps-app
+        app: ftps-pod
     spec:
       containers:
       - name: ftps
@@ -84,7 +84,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: ftps-pv-claim
   labels:
-    app: ftps-app
+    app: ftps-pvc
 spec:
   accessModes:
     - ReadWriteOnce

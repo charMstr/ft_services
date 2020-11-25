@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: mysql
   labels:
-    app: mysql-app
+    app: mysql-deployment
 spec:
   selector:
     matchLabels:
-      app: mysql-app
+      app: mysql-pod
   template:
     metadata:
       labels:
-        app: mysql-app
+        app: mysql-pod
     spec:
       containers:
       - name: mysql
@@ -62,7 +62,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
   labels:
-    app: mysql-app
+    app: mysql-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -78,10 +78,10 @@ kind: Service
 metadata:
   name: mysql-service
   labels:
-    app: mysql-app
+    app: mysql-service
 spec:
   selector:
-    app: mysql-app
+    app: mysql-pod
   ports:
   - port: 3306
     targetPort: mysql-cont-port

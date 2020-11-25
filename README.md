@@ -2,7 +2,12 @@
 
 This is a school project for the **_42cursus_**.
 
-_note: Each subparts of this project has its own readme.md_
+_note: Each subparts of this project has its own readme.md, they contain tips
+and a bunch of details_
+
+_note2: If you are a 42 student, i made a separate README.md:
+README\_FOR\_42PEERS.md it contains some helpful hints on how to approch the
+subject._
 
 ## OVERVIEW OF PROJECT
 
@@ -123,6 +128,34 @@ others within the cluster for example.
 - volumes, making it possible to maintain data persistence when containers
 craah and are being restarted.
 
+#### DEPLOYMENTS
+
+they are a superset of the pods, they creat the replicasets objects as well.
+So basically they contain inside them the definition of another kubernetes
+object: a pod (starting at the _template_ keyword in the  yaml format)
+
+the metadata.name will be the name of the deployment + random hash\_key:
+
+_ex: metadata.name = nginx   --> nginx-4sf09nasdf_
+
+the pods will inherit this name and have another hash appended to it, on top.
+
+#### NOTE ON LABELS AND SELECTORS.
+
+The label of the deployment can be anything, example: _nginx-deployment_
+the selector has to be exactly matching the pod's label.
+if _spec.selector.matchLabels.app = ngnix-pod _
+then _spec.template.metadata.labels.app = nginx-pod_
+
+same goes with the services. they also target the **pods**.
+their name can be anything, as well as their label.
+But the selector must match the pods label (defined in the subparts of the
+deployments).
+
+#### SERVICES
+
+LMGTFY
+
 #### PERSISTENT VOLUMES WITH MINIKUBE
 
 A persistent volume is a kubernetes object which act as if it was a kard drive
@@ -201,3 +234,19 @@ volume otherwise the data will be lost between different containers lifecycle.
 
 More details on the dedicated README.md of this microservice:
 _see srcs/mysql/README.md_.
+
+### 6. "TELEGRAF" CONTAINER:
+
+This is a open choice in the subject, it is collecting metrics and feeds them
+into our influxdb database. Telegraf is a plugin-driven agent that collects 
+time series data. there is a pluggin for kubernetes.
+
+### 6. "INFLUXDB" CONTAINER:
+
+It will receive time series data in a database, and grafana will access that
+database to display some nice visuals.
+
+### 7. "GRAFANA" CONTAINER:
+
+Create your own dashboards to display the time series data you collected on
+whatever. in our case the data we collected on pods.

@@ -5,10 +5,10 @@ metadata:
   annotations:
     metallb.universe.tf/allow-shared-ip: "sharing key"
   labels:
-    app: grafana-app
+    app: grafana-service
 spec:
   selector:
-    app: grafana-app
+    app: grafana-pod
   type: LoadBalancer
   loadBalancerIP: ${CLUSTER_EXTERNAL_IP}
   ports:
@@ -23,17 +23,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grafana-deployment
+  name: grafana
   labels:
-    app: grafana-app
+    app: grafana-deployment
 spec:
   selector:
     matchLabels:
-      app: grafana-app
+      app: grafana-pod
   template:
     metadata:
       labels:
-        app: grafana-app
+        app: grafana-pod
     spec:
       containers:
       - name: grafana
