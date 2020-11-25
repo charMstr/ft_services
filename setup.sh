@@ -14,13 +14,14 @@ build_alpine_docker_images()
 		case $DIR in
 			secrets|configmaps|metallb|templates_for_cluster_ip) continue;;
 		esac
+		echo -n " - \033[32m ${DIR}_image \033[m"
 		docker build -t ${DIR}_image srcs/$DIR  2>&1 > /dev/null
 		if [ $? != 0 ]
 		then
 			echo "\033[31m building custom alpine image $IMAGE_NAME failed \033[0m" > /dev/stderr
 			exit
 		fi
-		echo " - \033[32m ${DIR}_image \033[m ✅"
+		echo " ✅"
 	done
 }
 
@@ -114,6 +115,10 @@ inject_selected_external_ip()
 	envsubst '$CLUSTER_EXTERNAL_IP' < srcs/templates_for_cluster_ip/nginx_configmap.yaml > ./srcs/configmaps/nginx_configmap.yaml
 	RES=$((RES+$?))
 
+	#set in grafana configmap
+	envsubst '$CLUSTER_EXTERNAL_IP' < srcs/templates_for_cluster_ip/grafana_configmap.yaml > ./srcs/configmaps/grafana_configmap.yaml
+	RES=$((RES+$?))
+
 	#set in nginx service
 	envsubst '$CLUSTER_EXTERNAL_IP' < srcs/templates_for_cluster_ip/nginx_deployment_svc.yaml > srcs/nginx/nginx_deployment_svc.yaml
 	RES=$((RES+$?))
@@ -125,8 +130,13 @@ inject_selected_external_ip()
 	#set in wordpress service and deployment
 	envsubst '$CLUSTER_EXTERNAL_IP' < srcs/templates_for_cluster_ip/wp_deployment_svc.yaml > srcs/wordpress/wp_deployment_svc.yaml
 	RES=$((RES+$?))
+
 	#set in ftps service
 	envsubst '$CLUSTER_EXTERNAL_IP' < srcs/templates_for_cluster_ip/ftps_deployment_svc.yaml > srcs/ftps/ftps_deployment_svc.yaml
+	RES=$((RES+$?))
+
+	#set in ftps service
+	envsubst '$CLUSTER_EXTERNAL_IP' < srcs/templates_for_cluster_ip/grafana_deployment_svc.yaml > srcs/grafana/grafana_deployment_svc.yaml
 	RES=$((RES+$?))
 	if [ $RES -gt 0 ]
 	then
@@ -171,6 +181,12 @@ create_kubernetes_deployments_services()
 	kubectl apply -f ./srcs/mysql/
 	RES=$((RES+$?))
 	kubectl apply -f ./srcs/ftps/
+	RES=$((RES+$?))
+	kubectl apply -f ./srcs/influxdb/
+	RES=$((RES+$?))
+	kubectl apply -f ./srcs/telegraf/
+	RES=$((RES+$?))
+	kubectl apply -f ./srcs/grafana/
 	RES=$((RES+$?))
 	if [ $? -gt 0 ]
 	then

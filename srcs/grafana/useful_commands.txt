@@ -1,0 +1,18 @@
+#BUILD IMAGE
+docker build -t grafana .
+
+#RUN IN INTERACTIVE MODE
+docker run -it --rm --name grafana_cont -p 3000:3000 grafana
+
+#RUN IN DETACHED MODE
+docker run -d --rm --name grafana_cont -p 3000:3000 grafana
+
+#RUN IN DETACHED IN NETWORK
+docker run -d --rm --name grafana_cont -p 3000:3000 --network=mon_reseau grafana
+docker inspect grafana_cont
+
+# GET INSIDE
+docker exec -it grafana_cont /bin/sh
+
+#DELETE THE BAD BOY
+docker rm -f grafana_cont

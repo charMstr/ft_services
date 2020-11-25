@@ -1,0 +1,19 @@
+#BUILD IMAGE
+docker build -t telegraf .
+
+# INTERACTIVE MODE
+docker run -it --rm --name telegraf_cont telegraf
+
+# DETACHED MODE
+docker run -d --rm --name telegraf_cont telegraf
+
+
+#RUN IN NETWORK, WITH IP OF INFLUX_DB AND INSPECT
+docker run -d --rm --name telegraf_cont --network=mon_reseau telegraf
+docker inspect telegraf_cont
+
+#GET IN
+docker exec -it telegraf_cont /bin/sh
+
+#DELETE
+docker rm -f telegraf_cont

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-configmap
+data:
+  __GRAFANA_ANON_LOGIN__: "true"
+  __GRAFANA_LOG_LEVEL__: "info"
+  __GRAFANA_PORT__: "3000"
+  __GRAFANA_IP__: ${CLUSTER_EXTERNAL_IP}
+  __INFLUXDB_URL__: http://influxdb-service:8086

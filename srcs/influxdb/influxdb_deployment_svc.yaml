@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb-deployment
+  labels:
+    app: influxdb-app
+spec:
+  selector:
+    matchLabels:
+      app: influxdb-app
+  template:
+    metadata:
+      labels:
+        app: influxdb-app
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb_image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8086
+          name: influ-cont-port
+        volumeMounts:
+        - name: influxdb-volume
+          mountPath: /var/lib/influxdb
+      volumes:
+      - name: influxdb-volume
+        persistentVolumeClaim:
+          claimName: influxdb-pv-claim
+
+---
+
+#the storage class is provided by default by minikube.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-pv-claim
+  labels:
+    app: influxdb-app
+spec:
+  #storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+#No need to create an external cluster ip for a backend service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb-service
+  labels:
+    app: influxdb-app
+spec:
+  selector:
+    app: influxdb-app
+  ports:
+  - port: 8086
+    targetPort: influ-cont-port
+    protocol: TCP
+    name: influxdb-service-port
+

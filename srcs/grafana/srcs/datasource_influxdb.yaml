@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+- name: ${__INFLUXDB_DB_NAME__}
+  orgId: 1
+  type: influxdb
+  access: proxy
+  url: ${__INFLUXDB_URL__}
+  database: ${__INFLUXDB_DB_NAME__}
+  isDefault: true
+  version: 1
+  editable: false
+  basicAuth: true
+  basicAuthUser: ${__INFLUXDB_DB_USER__}
+  basicAuthPassword: ${__INFLUXDB_DB_PASSWORD__}

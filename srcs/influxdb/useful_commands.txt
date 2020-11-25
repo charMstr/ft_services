@@ -1,0 +1,29 @@
+#BUILD IMAGE
+docker build -t influxdb .
+
+# INTERACTIVE SHELL
+docker run -it --rm -p 8086:8086 --name influxdb_cont influxdb
+
+# DETACHED MODE
+docker run -d --rm -p 8086:8086 --name influxdb_cont influxdb
+
+###############################################################################
+###### create a network
+docker network create mon_reseau
+
+#START THE CONTAINER WITHIN THE NETWORK AND INSPECT IP
+docker run -d --rm -p 8086:8086 --name influxdb_cont --network=mon_reseau influxdb \
+&& docker inspect influxdb_cont
+
+# GET INTO THE RUNNING CONTAINER
+docker exec -it influxdb_cont /bin/sh ;
+
+#DELETE THE OLD BOY
+docker rm -f influxdb_cont
+
+#CHECK DATABASE
+#inside the container:
+influx
+show databases
+use <db_name>
+show measurements

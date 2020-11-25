@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-app
+  labels:
+    app: telegraf-app
+spec:
+  selector:
+    matchLabels:
+      app: telegraf-app
+  template:
+    metadata:
+      labels:
+        app: telegraf-app
+    spec:
+      #tying the pod to an account name
+      serviceAccountName: telegraf-account
+      containers:
+      - name: telegraf
+        image: telegraf_image
+        imagePullPolicy: Never
+        #this is a way to turn all my secrets keys into env var inside the cont
+        envFrom:
+          - secretRef:
+              name: telegraf-secrets
+        envFrom:
+          - configMapRef:
+              name: telegraf-configmap
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: telegraf-account
+  labels:
+    app: telegraf-account
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: telegraf-account 
+roleRef:          #the role we are binding
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:         #the subject that gets this role
+- kind: ServiceAccount
+  name: telegraf-account
+  namespace: default
+  
