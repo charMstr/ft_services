@@ -7,6 +7,8 @@
 # function for building my docker images.
 build_alpine_docker_images()
 { 
+	#MAKE THE DOCKERD AVAILABLE FROM WITHIN THE MINIKUBE
+	eval $(minikube docker-env)
 	echo "\n\033[32m building custome alpine images: \033[m"
 	for DIR in $(find ./srcs/ -mindepth 1 -maxdepth 1 -type d)
 	do	
@@ -59,8 +61,6 @@ start_minikube()
 	fi
 	#enable the dashboard
 	minikube addons enable dashboard
-	#MAKE THE DOCKERD AVAILABLE FROM WITHIN THE MINIKUBE
-	eval $(minikube docker-env)
 }
 
 #function to set up metallb (no update of minikube, therefore we dont use the
@@ -195,10 +195,32 @@ create_kubernetes_deployments_services()
 	fi
 }
 
+display_for_correction()
+{
+	clear;
+	echo "\n\033[5;32m	=====================\n"\
+		"	   BUILD SUCCESSFUL  \n" \
+		"	=====================\033[0m"
+	echo "\nyour cluster IP is: \033[38;5;187m$CLUSTER_EXTERNAL_IP \033m"
+	CLUSTER_EXTERNAL_IP="\033[38;5;187m$CLUSTER_EXTERNAL_IP\033[0m"
+	echo "\n\n \033[4m\033[38;5;255m CORRECTION LINKS: \033[0m\n"
+	echo " - wordpress:                     http://$CLUSTER_EXTERNAL_IP:5050"
+	echo " - phpmyadmin:                     http://$CLUSTER_EXTERNAL_IP:5000"
+	echo " - grafana:                        http://$CLUSTER_EXTERNAL_IP:3000"
+	echo " - nginx:"
+	echo "    - with redirect to https:      http://$CLUSTER_EXTERNAL_IP or $CLUSTER_EXTERNAL_IP"
+	echo "    - https:                       https://$CLUSTER_EXTERNAL_IP" 
+	echo "    - reverse proxy to phpma:      https://$CLUSTER_EXTERNAL_IP:443/phpmyadmin"
+	echo "    - temporary redirect to wp:    https://$CLUSTER_EXTERNAL_IP:443/wordpress\n"
+}
+
 ###############################################################################
 #### START
 ###############################################################################
 
+
+#make sure docker can be used by user42
+echo "user42" | sudo -S chmod 666 /var/run/docker.sock 2>&1 > /dev/null 
 get_external_ip;
 inject_selected_external_ip;
 start_minikube;
@@ -208,5 +230,7 @@ create_secrets;
 create_kubernetes_configmaps;
 create_kubernetes_deployments_services;
 
-echo "\n\033[5;32m BUILD SUCCESSFUL\033[0m"
-echo "\nyour cluster IP is: \033[38;5;187m$CLUSTER_EXTERNAL_IP \033m"
+#display_for_correction;
+#echo -n "Press 'ENTER' for \033[38;5;255mMinikube Dashboard: \033[m"
+#read REPLY 
+#minikube dashboard

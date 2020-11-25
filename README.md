@@ -83,6 +83,21 @@ docker exec -it <k8s-minikube_container_name> /bin/sh
 to be able to be where the cluster is deployed. doing so i could or example see
 where my persistent volumes where mounted.
 
+and within this minikube cluster deployed in your docker engine on your local
+machine, there is another docker running. thats where you will find images your
+build in your script for example.
+
+_TIP: if you do not understand this concept you might be running into problems
+like: trying to rebuild images while your cluster is already running, and
+realising that the images are not rebuilt. well they are being rebuild, but not
+with the correct docker engine.
+see:
+```
+eval $(minikube docker-env)
+```
+you will need to run your docker (re)build command within the scope this
+was invoked._
+
 #### VERSION USED:
 minikube version: v1.9.0
 _note: this previous version does not come withe the metallb addon_.

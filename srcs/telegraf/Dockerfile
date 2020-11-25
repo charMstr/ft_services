@@ -20,4 +20,3 @@ COPY srcs/telegraf.conf /etc/telegraf/telegraf.conf
 
 ENTRYPOINT	["/usr/bin/telegraf"]
 #CMD exec /bin/sh -c "trap : TERM INT; sleep 9999999999d & wait"
-#ENTRYPOINT	["/bin/sh"]
