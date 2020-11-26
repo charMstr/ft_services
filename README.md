@@ -2,12 +2,13 @@
 
 This is a school project for the **_42cursus_**.
 
-_note: Each subparts of this project has its own readme.md, they contain tips
-and a bunch of details_
+_note: Each subparts of this project has its own readme.md, they all the
+informations used to run the Dockerfile and also contain tips and a bunch of
+details about implementations and good practice_
 
-_note2: If you are a 42 student, i made a separate README.md:
-**README\_FOR\_42PEERS.md** it contains some helpful hints on how to approch the
-subject. I also made a correction script: **correct\_peer.sh**_
+_note2: If you are a 42 student, i made a separate **README\_FOR\_42PEERS.md** it
+contains some helpful hints on how to approch the subject. I also made a
+correction script: **correct\_peer.sh**_
 
 ## OVERVIEW OF PROJECT
 
@@ -102,55 +103,8 @@ individually.
 - services (either reachable from the exterior (type: _LoadBalancer_) or not
 (type: _ClusterIp_) they will allow us to make our pods communicate with each
 others within the cluster for example.
-- volumes, making it possible to maintain data persistence when containers
-craah and are being restarted.
-
-#### DEPLOYMENTS
-
-they are a superset of the pods, they creat the replicasets objects as well.
-So basically they contain inside them the definition of another kubernetes
-object: a pod (starting at the _template_ keyword in the  yaml format)
-
-the metadata.name will be the name of the deployment + random hash\_key:
-
-_ex: metadata.name = nginx   --> nginx-4sf09nasdf_
-
-the pods will inherit this name and have another hash appended to it, on top.
-
-#### NOTE ON LABELS AND SELECTORS.
-
-The label of the deployment can be anything, example: _nginx-deployment_
-the selector has to be exactly matching the pod's label.
-if _spec.selector.matchLabels.app = ngnix-pod _
-then _spec.template.metadata.labels.app = nginx-pod_
-
-same goes with the services. they also target the **pods**.
-their name can be anything, as well as their label.
-But the selector must match the pods label (defined in the subparts of the
-deployments).
-
-#### SERVICES
-
-LMGTFY
-
-#### PERSISTENT VOLUMES WITH MINIKUBE
-
-A persistent volume is a kubernetes object which act as if it was a kard drive
-plugged in. To access those volumes within our deployments, in the yaml file we
-mount the volume on the **pod** itself (with a _persistent volume claim_:
-another kubernetes object) and on the **container**.
-
-when the pod does a _persistant volume claim_, a matching _persistant volume_
-that should have already been created will be used.
-
-To avoid creating manually those _persistent volume_ objects, kubernetes offers
-a way to dinamically creat them on demand: _Storage Classe_ objects do this
-for us.
-
-Minikube has a builtin _storageclass_ that will creat _persistent volumes_ on
-demand dynamically on the host. those are at the _host\_path_ location
-
-documentation: [https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/]
+- volumes, making it possible to maintain data persistence even when containers
+crash and are being restarted.
 
 ## UNDERSTANDING PROJECT PARTS:
 

@@ -159,8 +159,57 @@ eval $(minikube docker-env)
 you will need to run your docker (re)build command within the scope that
 command was invoked._
 
+### 6) MORE ABOUT KUBERNETES OBJECTS:
 
-### 6) CREATING YOUR .YAML FILES, UNDERSTANDING THEIR SYNTHAX:
+#### DEPLOYMENTS
+
+they are a superset of the pods, they creat the replicasets objects as well.
+So basically they contain inside them the definition of another kubernetes
+object: a pod (starting at the _template_ keyword in the  yaml format)
+
+the metadata.name will be the name of the deployment + random hash\_key:
+
+_ex: metadata.name = nginx   --> nginx-4sf09nasdf_
+
+the pods will inherit this name and have another hash appended to it, on top.
+
+#### NOTE ON LABELS AND SELECTORS.
+
+The label of the deployment can be anything, example: _nginx-deployment_
+the selector has to be exactly matching the pod's label.
+if _spec.selector.matchLabels.app = ngnix-pod _
+then _spec.template.metadata.labels.app = nginx-pod_
+
+same goes with the services. they also target the **pods**.
+their name can be anything, as well as their label.
+But the selector must match the pods label (defined in the subparts of the
+deployments).
+
+#### SERVICES
+
+LMGTFY
+
+#### PERSISTENT VOLUMES WITH MINIKUBE
+
+A persistent volume is a kubernetes object which act as if it was a kard drive
+plugged in. To access those volumes within our deployments, in the yaml file we
+mount the volume on the **pod** itself (with a _persistent volume claim_:
+another kubernetes object) and on the **container**.
+
+when the pod does a _persistant volume claim_, a matching _persistant volume_
+that should have already been created will be used.
+
+To avoid creating manually those _persistent volume_ objects, kubernetes offers
+a way to dinamically creat them on demand: _Storage Classe_ objects do this
+for us.
+
+Minikube has a builtin _storageclass_ that will creat _persistent volumes_ on
+demand dynamically on the host. those are at the _host\_path_ location
+
+documentation: [https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/]
+
+
+### 7) CREATING YOUR .YAML FILES, UNDERSTANDING THEIR SYNTHAX:
 
 Those will allow you to deploy your kubernetes objects without manually writing
 all the option on the command line interface with kubectl.
@@ -174,7 +223,7 @@ _Tip: The kubernetes object always have the same main 2 fields:
 With this in mind you understand that a deployment yaml file contains
 inside it another kubernetes object for pods (with again metadata and spec)_
 
-### 7) DEPLOYING DEPLOYMENTS AND EXPOSING THEM WITH SERVICES
+### 8) DEPLOYING DEPLOYMENTS AND EXPOSING THEM WITH SERVICES
 
 It would be a good idea to only validate your ftps, nginx, mysql, phpmyadmin
 and wordpress container at this stage. Some adjustements might be needed and
