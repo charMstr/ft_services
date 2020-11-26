@@ -10,7 +10,7 @@ _note2: If you are a 42 student, i made a separate **README\_FOR\_42PEERS.md** i
 contains some helpful hints on how to approch the subject. I also made a
 correction script: **correct\_peer.sh**_
 
-## OVERVIEW OF PROJECT
+## I) OVERVIEW OF PROJECT
 
 The projects is about deploying automatically a cluster of microservices using
 homemade container images and an orchestration tool.
@@ -32,7 +32,7 @@ From the outside world, the access to the cluster is made through a load
 balancer. MetalLB is used for this purpose. It will publish only one IP to
 access the whole cluster.
 
-## USAGE
+## II) USAGE
 
 ### PREREQUISITES:
 -docker installed and running.
@@ -64,7 +64,7 @@ are found either in the configmaps(non sensitive) and secrets(sensitive)._
 
 **_important note:_** secrets.yaml file should be stored independently.
 
-## MINIKUBE AND METALLB:
+## III) MINIKUBE AND METALLB:
 
 ### MINIKUBE:
 It is a tool allowing us to deploy a very basic version of a cluster, but
@@ -94,7 +94,7 @@ Metallb will need to provide ip addresses in our case that are in the same
 subnet as the docker0 bridge (the bridge the docker engine creates).
 This because we start our cluster within the docker engine.
 
-## MORE ABOUT KUBERNETES OBJECTS(K8S):
+## IV) MORE ABOUT KUBERNETES OBJECTS(K8S):
 
 Oour cluster will be composed of different kubernetes objects:
 - deployments theiy are a superset of pods, so that we dont have to handel them
@@ -106,7 +106,7 @@ others within the cluster for example.
 - volumes, making it possible to maintain data persistence even when containers
 crash and are being restarted.
 
-## UNDERSTANDING PROJECT PARTS:
+## V) UNDERSTANDING PROJECT PARTS:
 
 ### 1. "NGINX" CONTAINER:
 
