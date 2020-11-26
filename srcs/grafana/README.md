@@ -38,6 +38,11 @@ an admin in the top left corner.
 _Note: Grafana uses an internal database to store its dashboards, a default
 one is embeded within the server binary._
 
+## ADDING A DASHBOARD
+
+If you successfully add a dashbord through your .json file, it won't appear in
+the home page. You will have to click on the left pannel in manage dashboards!!
+
 ## RUNNING SERVICES IN THE SAME CONTAINER:
 
 - grafana-server

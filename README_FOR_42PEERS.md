@@ -1,5 +1,6 @@
-# OVERVIEW
+# FT_SERVICES TIPS AND ADVICES
 
+## INTRO
 This is a README.md for my peers working on the same school project at 42.
 I intend to give here interesting tips and hints based on my experience on how
 to approach this project as it can be complexe to get the big picture at first.
@@ -9,14 +10,17 @@ copy/pasting too much.
 _note: each subparts of the ./srcs folder has its own readme with some usefull
 details and tips about why things workded or did not._
 
-## Good approach according to my personal experience:
+A correction script is available in the root of this folder:
+**correct\_peer.sh**
+
+## GOOD APPROACH ACCORDING TO MY PERSONAL EXPERIENCE:
 
 According to my experience on this project, and if i had to redo it, my
 approach would be to follow the following list. But also to not be ashamed with
 reading other students projects. Its all about configuration, there is no need
 to stay stuck for three days because we are missing a line or a character.
 
-### 1) Understanding what is kubernetes:
+### 1) UNDERSTANDING WHAT IS KUBERNETES:
 
 Kubernetes is a container orchestration tool.
 It will allow you to deploy your app in a fragmented way (microservices style).
@@ -29,7 +33,7 @@ One of the most interesting advantage of using a microservices architecture is
 the fact that you can update a small part of your app in general, without
 stopping the application from running.
 
-### 2) Things you need to understand before working from ground to top:
+### 2) THINGS YOU NEED TO UNDERSTAND BEFORE WORKING FROM GROUND TO TOP:
 
 All you need to know before starting is the concept that when deploying your
 cluster, you will need to be able to interconnect your containers together.
@@ -38,7 +42,7 @@ For this interconnection to be possible, you will need to master how to run
 docker images and passing to then environment variables or arguments, in order
 to tune their configuration at boot time.
 
-### 3) Master building your custom images:
+### 3) MASTER BUILDING YOUR CUSTOM IMAGES:
 
 Maybe a good idea to start with the things you already know like Nginx server,
 or explore the ftps server image.
@@ -63,7 +67,7 @@ docker logs -f _**container_name**_
 Always try to undertand the different type of logs a binary can produce for you
 and if some debug options can be activated.
 
-### 4) interconnecting containers locally:
+### 4) INTERCONNECTING CONTAINERS LOCALLY:
 
 It is possible to get your containers to work with each others without 
 deploying your cluster through kubernetes.
@@ -118,14 +122,63 @@ of the mysql\_cont we just created._
 Now ou should be able to connect successfully to your msql container and its
 server if you enter in your search engine **localhost:5050**.
 
-### 5) Understand and start minikube on your local machine:
+### 5) UNDERSTAND AND START MINIKUBE ON YOUR LOCAL MACHINE:
 
-minikube will allow you to deploy your app in a cluster that is a small version
-reserved for development.
+minikube will allow you to deploy your app in a development version of a
+cluster.
 
-At least be able to creat one kubernetes object with the kubectl cli.
+I personally used the school vm (Ubuntu 18.04.5 LTS as of today).
+And i ran minikube using the docker driver:
 
-### 6) Creating your .yaml files, understanding their synthax:
+```
+minikube start --vm-driver=docker
+```
+This implies a couple of things:
+- the whole minikube cluster is deployed within a docker container instead of
+a VM. In that cluster/container you have all your kubernetes obejectscreated,
+and "another docker" is running to run containers inside your pods.
+- your minikube ip wont be 127.0.0.1. you need to look into the bridge Docker0.
+- instead of running a command like `ssh minikubeip`, you would have to do
+```
+docker ps
+docker exec -it <k8s-minikube_container_name> /bin/sh
+```
+
+_Tip: doing so i could for example see where my persistent volumes where
+mounted._
+
+_TIP: if you do not understand this concept you might be running into problems
+like: trying to rebuild images while your cluster is already running, and
+realising that the images are not rebuilt. well they are being rebuild, but not
+in the correct context for the docker engine.
+
+see:
+```
+eval $(minikube docker-env)
+```
+you will need to run your docker (re)build command within the scope that
+command was invoked._
+
+
+### 6) CREATING YOUR .YAML FILES, UNDERSTANDING THEIR SYNTHAX:
 
 Those will allow you to deploy your kubernetes objects without manually writing
-all the option on the command line interface
+all the option on the command line interface with kubectl.
+
+_Tip: The indentations in the yaml files represent the dots in the dotted
+notation._
+
+_Tip: The kubernetes object always have the same main 2 fields:
+- metadata
+- spec 
+With this in mind you understand that a deployment yaml file contains
+inside it another kubernetes object for pods (with again metadata and spec)_
+
+### 7) DEPLOYING DEPLOYMENTS AND EXPOSING THEM WITH SERVICES
+
+It would be a good idea to only validate your ftps, nginx, mysql, phpmyadmin
+and wordpress container at this stage. Some adjustements might be needed and
+this the part where you will be using your logs for debugs.
+
+Once thoses 5 containers work perfectly and they are all accessible
+behind the load balancer, then move on to the telegraf/influxdb/grafana stack.
