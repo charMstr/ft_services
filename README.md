@@ -2,9 +2,9 @@
 
 This is a school project for the **_42cursus_**.
 
-_note: Each subparts of this project has its own readme.md, they all the
-informations used to run the Dockerfile and also contain tips and a bunch of
-details about implementations and good practice_
+_note: Each subparts of this project has its own readme.md, they all contain the
+informations used to build from the Dockerfile and also contain tips and a bunch
+of details about implementations and good practice_
 
 _note2: If you are a 42 student, i made a separate **README\_FOR\_42PEERS.md** it
 contains some helpful hints on how to approch the subject. I also made a
